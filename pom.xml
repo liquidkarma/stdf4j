@@ -53,11 +53,20 @@
                <argLine>-Xmx1024m</argLine>
             </configuration>
          </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+               <descriptors>
+                  <descriptor>src/main/assembly/src.xml</descriptor>
+               </descriptors>
+            </configuration>
+         </plugin>
       </plugins>
    </build>
 
    <scm>
-      <connection>scm:svn:file:///svn/stdf4j/trunk</connection>
-      <developerConnection>scm:svn:file:///svn/stdf4j/trunk</developerConnection>
+      <connection>scm:svn:http://stdf4j.googlecode.com/svn/trunk</connection>
+      <developerConnection>scm:svn:https://stdf4j.googlecode.com/svn/trunk</developerConnection>
    </scm>
 </project>
