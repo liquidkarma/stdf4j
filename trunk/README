@@ -7,9 +7,21 @@ use any example STDF with corresponding statistics. For our testing we used
 an ascii dump of the STDF using libstdf (http://freestdf.sourceforge.net) to
 get the statistics for the test files.
 
-The 'dump' script is included to show how to do an ascii dump of an STDF
-using the Dump tool class.
 
-http://code.google.com
+BUILDING
+
+This project uses maven (http://maven.apache.org). To build you can do:
+mvn clean install
+
+To build the tools:
+cd tools && mvn clean install
+
+
+PROJECT WEBSITE
+
+http://code.google.com/p/stdf4j
+
+
+CONTACT
 
 tragicphantom@gmail.com
