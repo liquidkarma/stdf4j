@@ -10,11 +10,16 @@ get the statistics for the test files.
 
 BUILDING
 
-This project uses maven (http://maven.apache.org). To build you can do:
+This project uses maven (http://maven.apache.org) for building:
 mvn clean install
 
 To build the tools:
 cd tools && mvn clean install
+
+
+RELEASE
+
+[TODO]
 
 
 PROJECT WEBSITE
