@@ -16,29 +16,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with stdf4j.  If not, see <http://www.gnu.org/licenses/>.
 **/
-package com.tragicphantom.stdf.tools;
+package com.tragicphantom.stdf.tools.viewer;
 
-import com.tragicphantom.stdf.STDFContainer;
-import com.tragicphantom.stdf.Record;
+public class DataCell{
+   private TreeRecord record;
+   private String     field;
+   private String     value;
 
-public class Dump{
-   public static void dumpSTDF(String fileName) throws Exception{
-      STDFContainer container = new STDFContainer(fileName);
-
-      System.out.println("Record count: " + container.size());
-
-      for(Record record : container)
-         System.out.print(record.toString());
+   public DataCell(TreeRecord _record, String _field, String _value){
+      record = _record;
+      field  = _field;
+      value  = _value;
    }
 
-   public static void main(String [] args){
-      for(String arg : args){
-         try{
-            dumpSTDF(arg);
-         }
-         catch(Exception e){
-            e.printStackTrace();
-         }
-      }
+   public TreeRecord getRecord(){
+      return record;
+   }
+
+   public String getFieldName(){
+      return field;
+   }
+
+   public String getValue(){
+      return value;
    }
 }

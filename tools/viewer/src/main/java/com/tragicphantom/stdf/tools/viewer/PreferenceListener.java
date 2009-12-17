@@ -16,29 +16,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with stdf4j.  If not, see <http://www.gnu.org/licenses/>.
 **/
-package com.tragicphantom.stdf.tools;
+package com.tragicphantom.stdf.tools.viewer;
 
-import com.tragicphantom.stdf.STDFContainer;
-import com.tragicphantom.stdf.Record;
-
-public class Dump{
-   public static void dumpSTDF(String fileName) throws Exception{
-      STDFContainer container = new STDFContainer(fileName);
-
-      System.out.println("Record count: " + container.size());
-
-      for(Record record : container)
-         System.out.print(record.toString());
-   }
-
-   public static void main(String [] args){
-      for(String arg : args){
-         try{
-            dumpSTDF(arg);
-         }
-         catch(Exception e){
-            e.printStackTrace();
-         }
-      }
-   }
+public interface PreferenceListener{
+   public void preferencesChanged(Preferences preferences);
 }

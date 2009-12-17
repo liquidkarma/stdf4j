@@ -16,29 +16,36 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with stdf4j.  If not, see <http://www.gnu.org/licenses/>.
 **/
-package com.tragicphantom.stdf.tools;
+package com.tragicphantom.stdf.tools.viewer;
 
-import com.tragicphantom.stdf.STDFContainer;
-import com.tragicphantom.stdf.Record;
+import java.io.File;
 
-public class Dump{
-   public static void dumpSTDF(String fileName) throws Exception{
-      STDFContainer container = new STDFContainer(fileName);
+import javax.swing.filechooser.FileFilter;
 
-      System.out.println("Record count: " + container.size());
-
-      for(Record record : container)
-         System.out.print(record.toString());
+public class StdfFileFilter extends FileFilter{
+   public String getDescription(){
+      return "STDF Files";
    }
 
-   public static void main(String [] args){
-      for(String arg : args){
-         try{
-            dumpSTDF(arg);
+   public boolean accept(File f){
+      if(f.isDirectory())
+         return true;
+
+      String name = f.getName();
+      int i = name.lastIndexOf('.');
+
+      if(i > 0 && i < name.length() - 1){
+         String ext = name.substring(i + 1).toLowerCase();
+         if(ext.equals("gz") || ext.equals("bz2")){
+            int j = name.lastIndexOf('.', i - 1);
+            if(j > 0)
+               ext = name.substring(j + 1, i).toLowerCase();
          }
-         catch(Exception e){
-            e.printStackTrace();
-         }
+
+         if(ext.equals("std") || ext.equals("stdf"))
+            return true;
       }
+
+      return false;
    }
 }
