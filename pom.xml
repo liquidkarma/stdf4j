@@ -51,6 +51,10 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
                <argLine>-Xmx1024m</argLine>
+               <!-- TODO: create data files and add tests that can be distributed -->
+               <excludes>
+                  <exclude>**/*.java</exclude>
+               </excludes>
             </configuration>
          </plugin>
          <plugin>

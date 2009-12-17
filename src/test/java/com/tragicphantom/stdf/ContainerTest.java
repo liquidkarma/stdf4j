@@ -24,20 +24,6 @@ import org.junit.Test;
 import org.junit.Assert;
 
 public class ContainerTest{
-   private HashMap<String, Integer> getStats(STDFContainer container){
-      HashMap<String, Integer> stats = new HashMap<String, Integer>();
-
-      for(Record record : container){
-         String key = record.getType().toUpperCase();
-         if(stats.containsKey(key))
-            stats.put(key, stats.get(key) + 1);
-         else
-            stats.put(key, 1);
-      }
-
-      return stats;
-   }
-
    // TODO: example test case that should be updated with a real STDF
    //       from your project along with the applicable statistics
    @Test
@@ -46,7 +32,7 @@ public class ContainerTest{
       STDFContainer container = new STDFContainer("testdata/test_file.std.gz");
       Assert.assertEquals(153580, container.size());
 
-      HashMap<String, Integer> stats = getStats(container);
+      HashMap<String, Integer> stats = TestHelper.getStats(container);
 
       Assert.assertEquals(300   , (int)stats.get("BPS"));
       Assert.assertEquals(9683  , (int)stats.get("DTR"));
