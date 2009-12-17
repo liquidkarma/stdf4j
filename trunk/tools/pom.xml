@@ -31,9 +31,7 @@
    <modules>
       <module>dump</module>
       <module>extract</module>
-<!--
       <module>viewer</module>
--->
    </modules>
 
    <dependencies>
