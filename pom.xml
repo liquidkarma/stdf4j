@@ -20,49 +20,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
-   <parent>
-      <groupId>com.tragicphantom.stdf</groupId>
-      <artifactId>root</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-   </parent>
+   <groupId>com.tragicphantom.stdf</groupId>
+   <artifactId>root</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+   <packaging>pom</packaging>
 
-   <artifactId>stdf4j</artifactId>
-   <packaging>jar</packaging>
-
-   <name>STDF4J :: Library :: ${project.version}</name>
+   <name>STDF4J :: Root :: ${project.version}</name>
    <description>${project.name}</description>
 
-   <dependencies>
-      <dependency>
-         <groupId>junit</groupId>
-         <artifactId>junit</artifactId>
-         <version>4.4</version>
-         <scope>test</scope>
-      </dependency>
-   </dependencies>
+   <modules>
+      <module>lib</module>
+      <module>tools</module>
+   </modules>
 
    <build>
       <plugins>
          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
+            <artifactId>maven-compiler-plugin</artifactId>
             <configuration>
-               <argLine>-Xmx1024m</argLine>
-               <!-- TODO: create data files and add tests that can be distributed -->
-               <excludes>
-                  <exclude>**/*.java</exclude>
-               </excludes>
-            </configuration>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <configuration>
-               <descriptors>
-                  <descriptor>src/main/assembly/src.xml</descriptor>
-               </descriptors>
+               <source>1.5</source>
+               <target>1.5</target>
             </configuration>
          </plugin>
       </plugins>
    </build>
+
+   <scm>
+      <connection>scm:svn:http://stdf4j.googlecode.com/svn/trunk</connection>
+      <developerConnection>scm:svn:https://stdf4j.googlecode.com/svn/trunk</developerConnection>
+   </scm>
 </project>
