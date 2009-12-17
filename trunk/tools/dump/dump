@@ -1,0 +1,1 @@
+java -Xmx1024m -jar target/stdfdump-*with-dependencies.jar $*
