@@ -69,8 +69,8 @@ public class RecordTypeParser extends DefaultHandler{
       tags.pop();
 
       if(qName.equals("RecordType")){
-         types.put(new RecordType(Integer.parseInt(type), Integer.parseInt(subType)),
-                   new RecordDescriptor(name, fields));
+         RecordType rt = new RecordType(Integer.parseInt(type), Integer.parseInt(subType));
+         types.put(rt, new RecordDescriptor(name, rt, fields));
 
          fields = new ArrayList<Field>();
       }

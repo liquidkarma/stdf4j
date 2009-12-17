@@ -136,7 +136,7 @@ public class STDFReader{
                   //System.err.println("(" + available + ") " + field.getName() + "[" + field.getType() + "] = " + value);
 
                   fieldList.add(value);
-                  record.addField(field.getName(), value);
+                  record.setField(field.getName(), value);
                }
 
                if(desc.getType().equals("Far")){
@@ -270,7 +270,7 @@ public class STDFReader{
          byte type = getBytes(1)[0];
          switch(type){
             case 0:
-               list.add(getBytes(1)[0]);
+               // just padding, no need to read anything
                break;
             case 1:
                list.add(readUnsigned(1));
@@ -329,8 +329,14 @@ public class STDFReader{
             break;
       }
 
-      int  fieldIndex = Integer.parseInt(typeCode.substring(1, pos));
-      long count      = (Long)fields.get(fieldIndex);
+      int    fieldIndex = Integer.parseInt(typeCode.substring(1, pos));
+      Object countObj   = fields.get(fieldIndex);
+      long   count      = 0;
+
+      if(countObj instanceof Long)
+         count = (Long)fields.get(fieldIndex);
+      else
+         count = (long)(int)(Integer)fields.get(fieldIndex);
 
       typeCode = typeCode.substring(pos);
 

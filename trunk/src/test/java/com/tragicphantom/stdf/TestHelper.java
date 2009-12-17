@@ -18,28 +18,20 @@
 **/
 package com.tragicphantom.stdf;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
-public class RecordDescriptor{
-   private String           type;
-   private RecordType       rt;
-   private ArrayList<Field> fields;
+public class TestHelper{
+   public static HashMap<String, Integer> getStats(STDFContainer container){
+      HashMap<String, Integer> stats = new HashMap<String, Integer>();
 
-   public RecordDescriptor(String type, RecordType rt, ArrayList<Field> fields){
-      this.type   = type;
-      this.rt     = rt;
-      this.fields = fields;
-   }
+      for(Record record : container){
+         String key = record.getType().toUpperCase();
+         if(stats.containsKey(key))
+            stats.put(key, stats.get(key) + 1);
+         else
+            stats.put(key, 1);
+      }
 
-   public String getType(){
-      return type;
-   }
-
-   public RecordType getRecordType(){
-      return rt;
-   }
-
-   public ArrayList<Field> getFields(){
-      return fields;
+      return stats;
    }
 }

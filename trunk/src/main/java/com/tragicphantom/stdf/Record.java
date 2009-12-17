@@ -32,7 +32,7 @@ public class Record{
       this.type = type;
    }
 
-   public void addField(String name, Object value){
+   public void setField(String name, Object value){
       fields.put(name, value);
    }
 
