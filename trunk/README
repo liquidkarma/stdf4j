@@ -13,8 +13,7 @@ BUILDING
 This project uses maven (http://maven.apache.org) for building:
 mvn clean install
 
-To build the tools:
-cd tools && mvn clean install
+This will build the library and all tools.
 
 
 RELEASE
