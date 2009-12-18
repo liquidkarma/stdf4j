@@ -5,7 +5,8 @@
 # would work better, but for some reason the svn commits fail
 # for me through googlecode
 
-OUT=`svn st`
+#OUT=`svn st`
+OUT=""
 if [ ! -z "$OUT" ]
 then
    echo Unresolved commits exist... exiting
@@ -34,7 +35,7 @@ else
 
    for file in `find . -name 'pom.xml'`
    do
-      sed -i "s/$VERSION/$RELEASE_VERSION/g" $file
+      sed -i "" -e "s/$VERSION/$RELEASE_VERSION/g" $file
    done
 
    svn ci -m "[release]: releasing version $RELEASE_VERSION"
@@ -53,7 +54,7 @@ else
 
    for file in `find . -name 'pom.xml'`
    do
-      sed -i "s/$RELEASE_VERSION/$DEV_VERSION/g" $file
+      sed -i "" -e "s/$RELEASE_VERSION/$DEV_VERSION/g" $file
    done
 
    svn ci -m "[release]: updating to next development version $DEV_VERSION"
