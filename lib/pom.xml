@@ -23,7 +23,7 @@
    <parent>
       <groupId>com.tragicphantom.stdf</groupId>
       <artifactId>root</artifactId>
-      <version>0.0.1</version>
+      <version>0.0.2-SNAPSHOT</version>
    </parent>
 
    <artifactId>stdf4j</artifactId>
