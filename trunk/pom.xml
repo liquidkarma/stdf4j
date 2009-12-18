@@ -22,7 +22,7 @@
 
    <groupId>com.tragicphantom.stdf</groupId>
    <artifactId>root</artifactId>
-   <version>0.0.1</version>
+   <version>0.0.1-SNAPSHOT</version>
    <packaging>pom</packaging>
 
    <name>STDF4J :: Root :: ${project.version}</name>
