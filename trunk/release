@@ -5,8 +5,7 @@
 # would work better, but for some reason the svn commits fail
 # for me through googlecode
 
-#OUT=`svn st`
-OUT=""
+OUT=`svn st`
 if [ ! -z "$OUT" ]
 then
    echo Unresolved commits exist... exiting
