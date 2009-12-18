@@ -1,0 +1,4 @@
+Outputs an ascii dump of a specified STDF file to the console.
+
+Example usage:
+./dump test_file.stdf > test_file.ascii
