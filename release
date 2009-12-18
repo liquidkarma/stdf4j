@@ -5,6 +5,10 @@
 # would work better, but for some reason the svn commits fail
 # for me through googlecode
 
+BASE="https://stdf4j.googlecode.com/svn"
+TRUNK="$BASE/trunk"
+TAGS="$BASE/tags"
+
 OUT=`svn st`
 if [ ! -z "$OUT" ]
 then
