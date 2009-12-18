@@ -18,7 +18,17 @@ This will build the library and all tools.
 
 RELEASE
 
-[TODO]
+In theory the following should release a new version:
+mvn release:prepare
+mvn release:perform
+
+I have not been able to get that to work with googlecode, however, so
+for now I have a specialized 'release' script in the current directory
+to help with automating releases. You should be able to run this without
+any arguments to create a new release. You will be prompted for the new
+release version as well as the next development version. The released version
+will be tagged in svn, but no files will be uploaded to googlecode. This
+must still be done manually.
 
 
 PROJECT WEBSITE
