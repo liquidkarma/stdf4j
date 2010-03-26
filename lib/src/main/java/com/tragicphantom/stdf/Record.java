@@ -84,7 +84,7 @@ public class Record{
          }
          else if(value instanceof Byte)
             repr = String.format("%x", (Byte)value);
-         else if(name.endsWith("_T")){
+         else if(name.endsWith("_T") && !name.equals("TEST_T")){
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis((Long)value * 1000L);
             repr = String.format("%1$ta %1$tb %1$td %1$tT %1$tY", cal);
