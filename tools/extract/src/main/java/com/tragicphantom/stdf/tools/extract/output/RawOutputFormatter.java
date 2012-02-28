@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -27,9 +27,9 @@ public class RawOutputFormatter implements OutputFormatter{
    public RawOutputFormatter(){
    }
 
-   public void write(Record record){
+   public void write(Record record) throws Exception{
       System.out.println(record.getType().toUpperCase());
-      HashMap<String, Object> fields = record.getFields();
+      HashMap<String, Object> fields = record.getData().getFields();
       for(Map.Entry<String, Object> field : fields.entrySet())
          System.out.println("   " + field.getKey() + " = " + field.getValue());
    }

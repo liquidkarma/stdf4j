@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -27,6 +27,8 @@ import java.util.regex.PatternSyntaxException;
 import java.util.Set;
 import java.util.Enumeration;
 import java.util.ArrayList;
+
+import com.tragicphantom.stdf.RecordData;
 
 public class FindThread extends Thread{
    private FindDialog pDialog = null;
@@ -75,7 +77,8 @@ public class FindThread extends Thread{
       showTraversal = _showTraversal;
    }
 
-   private TreeRecord getValueRecord(RecordTree tree, DefaultMutableTreeNode node){
+   private TreeRecord getValueRecord(RecordTree tree,
+                                     DefaultMutableTreeNode node){
       TreeRecord record = (TreeRecord)node.getUserObject();
       String nodeValue = record.typeName;
 
@@ -97,11 +100,19 @@ public class FindThread extends Thread{
          }
          else{
             if(record.getStdfRecord() != null){
-               Set<String> fieldNames = record.getStdfRecord().getFields().keySet();
+               RecordData data;
+               try{
+                  data = record.getStdfRecord().getData();
+               }
+               catch(Exception e){
+                  throw new RuntimeException(e);
+               }
+
+               Set<String> fieldNames = data.getFields().keySet();
                for(String fieldName : fieldNames){
                   if(expr1.matcher(fieldName).find()){
                      if(expr2 == null ||
-                        expr2.matcher(record.getStdfRecord().getField(fieldName).toString()).find())
+                        expr2.matcher(data.getField(fieldName).toString()).find())
                         return record;
                   }
                }

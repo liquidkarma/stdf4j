@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -24,7 +24,7 @@ public class DefaultOutputFormatter implements OutputFormatter{
    public DefaultOutputFormatter(){
    }
 
-   public void write(Record record){
+   public void write(Record record) throws Exception{
       System.out.println(record);
    }
 }

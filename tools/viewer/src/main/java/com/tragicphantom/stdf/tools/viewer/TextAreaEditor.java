@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -28,6 +28,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
 import java.util.HashSet;
+
+import com.tragicphantom.stdf.RecordData;
 
 class TextAreaEditor extends AbstractCellEditor implements TableCellEditor,
                                                            FocusListener,
@@ -109,8 +111,17 @@ class TextAreaEditor extends AbstractCellEditor implements TableCellEditor,
          //System.err.println("focus lost [" + data.getFieldName() + "]: " + textArea.getText() + " [" + origValue + "]");
          if(!textArea.getText().equals(origValue)){
             String fieldName = data.getFieldName();
-            if((fieldName.equals("TEST_TXT") || fieldName.equals("TEXT_DAT")) && data.getRecord().getStdfRecord() != null)
-               data.getRecord().getStdfRecord().setField(fieldName, textArea.getText());
+            if((fieldName.equals("TEST_TXT") || fieldName.equals("TEXT_DAT"))
+                  && data.getRecord().getStdfRecord() != null){
+               RecordData rd;
+               try{
+                  rd = data.getRecord().getStdfRecord().getData();
+               }
+               catch(Exception ex){
+                  throw new RuntimeException(ex);
+               }
+               rd.setField(fieldName, textArea.getText());
+            }
             else
                textArea.setText(origValue);
          }

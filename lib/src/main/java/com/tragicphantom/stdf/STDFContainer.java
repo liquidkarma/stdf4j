@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -18,6 +18,7 @@
 **/
 package com.tragicphantom.stdf;
 
+import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -35,6 +36,12 @@ public class STDFContainer implements RecordVisitor, Iterable<Record>{
       this(new STDFReader(fileName));
    }
 
+   public STDFContainer(InputStream is) throws FileNotFoundException,
+                                               IOException,
+                                               ParseException{
+      this(new STDFReader(is));
+   }
+
    public STDFContainer(STDFReader reader) throws FileNotFoundException,
                                                   IOException,
                                                   ParseException{
@@ -47,6 +54,12 @@ public class STDFContainer implements RecordVisitor, Iterable<Record>{
 
    public int size(){
       return records.size();
+   }
+
+   public void beforeFile(){
+   }
+
+   public void afterFile(){
    }
 
    public void handleRecord(Record record){

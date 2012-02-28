@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -26,9 +26,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Arrays;
 
 import java.util.zip.GZIPOutputStream;
 
@@ -95,19 +95,36 @@ public class STDFWriter{
 
       for(Record record : container){
          RecordDescriptor desc = descs.get(record.getType());
+         RecordData       data;
 
-         int available = getLength(record, desc);
+         try{
+            data = record.getData();
+         }
+         catch(java.text.ParseException pe){
+            throw new IOException("Unable to parse record data", pe);
+         }
+
+         int available = getLength(data, desc);
          writeHeader(available, desc.getRecordType());
 
-         ArrayList<Object> fieldValues = new ArrayList<Object>();
-         for(Field field : desc.getFields())
-            fieldValues.add(record.getField(field.getName()));
+         int size = desc.size();
+         Object[] fieldValues = new Object[size];
+         for(int i = 0; i < size; i++)
+            fieldValues[i] = data.getField(i);
 
          for(Field field : desc.getFields()){
             String fieldName = field.getName();
-            if(record.hasField(fieldName)){
-               available -= writeField(field.getType(), fieldValues, record.getField(fieldName));
-               if(available <= 0)
+            if(data.hasField(fieldName)){
+               available -= writeField(field.getType(), field.getLength(),
+                                       field.getArrayType(),
+                                       field.getArraySizeFieldIndex(),
+                                       fieldValues, data.getField(fieldName));
+
+               if(available < 0){
+                  //System.err.println(data);
+                  throw new IOException("Ran out of available bytes writing " + record.getType() + "." + fieldName);
+               }
+               else if(available == 0)
                   break;
             }
          }
@@ -121,22 +138,9 @@ public class STDFWriter{
       return descs;
    }
 
-   protected String getArrayType(String typeCode){
-      int pos    = 1;
-      int length = typeCode.length();
-      for(; pos < length; pos++){
-         char c = typeCode.charAt(pos);
-         if(c >= 'A' && c <= 'Z')
-            break;
-      }
-      return typeCode.substring(pos);
-   }
-
-   protected int getFieldLength(String typeCode, Object value) throws IOException{
+   protected int getFieldLength(char type, int length,
+                                char arrayType, Object value) throws IOException{
       int fieldLength = 0;
-
-      char   type   = typeCode.charAt(0);
-      String length = typeCode.substring(1);
 
       if(type == 'U' || type == 'I'){
 /*
@@ -156,20 +160,20 @@ public class STDFWriter{
 
          if(valid)
 */
-            fieldLength += Integer.parseInt(length);
+            fieldLength += length;
       }
       else if(type == 'R'){
 /*
          if(value instanceof Double){
             double x = (Double)value;
             if(x != 0.0)
-               fieldLength += Integer.parseInt(length);
+               fieldLength += length;
          }
          else
 */
-            fieldLength += Integer.parseInt(length);
+            fieldLength += length;
       }
-      else if(typeCode.equals("B1")){
+      else if(type == 'B' && length == 1){
 /*
          byte x = (Byte)value;
          if(x != (byte)0)
@@ -179,29 +183,26 @@ public class STDFWriter{
       else if(type == 'B' || type == 'N' || type == 'D'){
          if(value instanceof Integer)
             fieldLength += 4;
-         else if(length.equals("n"))
+         else if(length < 0)
             fieldLength += 1 + ((byte[])value).length;
          else
-            fieldLength += Integer.parseInt(length);
+            fieldLength += length;
       }
       else if(type == 'C'){
-         if(length.equals("n"))
+         if(length < 0)
             fieldLength += 1 + ((String)value).length();
          else
-            fieldLength += Integer.parseInt(length);
+            fieldLength += length;
       }
       else if(type == 'k'){
-         String arrayType = getArrayType(typeCode);
-         ArrayList<Object> x = (ArrayList<Object>)value;
-         for(Object o : x){
+         for(Object o : (Object[])value){
             if(o != null)
-               fieldLength += getFieldLength(arrayType, o);
+               fieldLength += getFieldLength(arrayType, length, ' ', o);
          }
       }
       else if(type == 'V'){
          fieldLength += 2;
-         ArrayList<Object> x = (ArrayList<Object>)value;
-         for(Object o : x){
+         for(Object o : (Object[])value){
             if(o != null){
                if(o instanceof Integer)
                   fieldLength += 2;
@@ -222,14 +223,18 @@ public class STDFWriter{
       return fieldLength;
    }
 
-   protected int getLength(Record record, RecordDescriptor desc) throws IOException{
+   protected int getLength(RecordData data,
+                           RecordDescriptor desc) throws IOException{
       int length = 0;
       for(Field field : desc.getFields()){
          String fieldName = field.getName();
-         if(record.hasField(fieldName)){
-            Object value = record.getField(fieldName);
+         if(data.hasField(fieldName)){
+            Object value = data.getField(fieldName);
             if(value != null)
-               length += getFieldLength(field.getType(), value);
+               length += getFieldLength(field.getType(), field.getLength(),
+                                        field.getArrayType(), value);
+            else if(field.getType() == 'C' && field.getLength() < 0)
+               length++;
          }
       }
       return length;
@@ -241,20 +246,17 @@ public class STDFWriter{
       writeUnsigned(rt.getSubType(), 1);
    }
 
-   protected int writeField(String typeCode, ArrayList<Object> fields, Object value) throws IOException{
-      assert typeCode.length() >= 2: "Invalid type code: " + typeCode;
-
-      char   type   = typeCode.charAt(0);
-      String length = typeCode.substring(1);
-
+   protected int writeField(char type, int length,
+                            char arrayType, int arraySizeFieldIndex,
+                            Object[] fields, Object value) throws IOException{
       switch(type){
          case 'U':
             if(value instanceof Integer)
-               return writeUnsigned(((Integer)value).longValue(), Integer.parseInt(length));
+               return writeUnsigned(((Integer)value).longValue(), length);
             else
-               return writeUnsigned((Long)value, Integer.parseInt(length));
+               return writeUnsigned((Long)value, length);
          case 'I':
-            return writeSigned((Integer)value, Integer.parseInt(length));
+            return writeSigned((Integer)value, length);
          case 'B':
          case 'N':
             {
@@ -269,13 +271,13 @@ public class STDFWriter{
 
                int extra = 0;
                int count;
-               if(length.equals("n")){
+               if(length < 0){
                   count = bytes.length;
                   writeUnsigned(count, 1);
                   extra = 1;
                }
                else
-                  count = Integer.parseInt(length);
+                  count = length;
 
                return writeBytes(bytes, count) + extra;
             }
@@ -285,9 +287,8 @@ public class STDFWriter{
             return writeString((String)value, length);
          case 'R':
             {
-               int count = Integer.parseInt(length);
-               ByteBuffer buffer = ByteBuffer.allocate(count).order(byteOrder);
-               if(count == 4){
+               ByteBuffer buffer = ByteBuffer.allocate(length).order(byteOrder);
+               if(length == 4){
                   if(value instanceof Double)
                      buffer.putFloat(((Double)value).floatValue());
                   else
@@ -295,15 +296,16 @@ public class STDFWriter{
                }
                else
                   buffer.putDouble((Double)value);
-               return writeBytes(buffer.array(), count);
+               return writeBytes(buffer.array(), length);
             }
          case 'V':
             return writeVariableTypeList(value);
          case 'k':
-            return writeArray(typeCode, fields, value);
+            return writeArray(arrayType, length,
+                              arraySizeFieldIndex, fields, value);
       }
 
-      throw new IOException("Invalid type code: " + typeCode);
+      throw new IOException("Invalid type code: " + type);
    }
 
    protected int writeSigned(int value, int numBits) throws IOException{
@@ -348,10 +350,10 @@ public class STDFWriter{
       return numBits;
    }
 
-   protected int writeBits(byte [] bytes, String lengthCode) throws IOException{
+   protected int writeBits(byte [] bytes, int length) throws IOException{
       int numBits = 0;
       int extra   = 0;
-      if(lengthCode.equals("n")){
+      if(length < 0){
          if(bytes == null)
             bytes = new byte[]{};
 
@@ -360,9 +362,9 @@ public class STDFWriter{
          extra = 2;
       }
       else
-         numBits = Integer.parseInt(lengthCode);
+         numBits = length;
 
-      int length = numBits / 8;
+      length = numBits / 8;
       if((numBits % 8) > 0)
          length++;
 
@@ -374,10 +376,10 @@ public class STDFWriter{
       return length;
    }
 
-   protected int writeString(String value, String length) throws IOException{
+   protected int writeString(String value, int length) throws IOException{
       int extra = 0;
       int count;
-      if(length.equals("n")){
+      if(length < 0){
          if(value == null)
             value = "";
 
@@ -385,15 +387,22 @@ public class STDFWriter{
          writeUnsigned(count, 1);
          extra = 1;
       }
-      else
-         count = Integer.parseInt(length);
+      else{
+         count = length;
+
+         if(value == null){
+            char [] dummy = new char[count];
+            Arrays.fill(dummy, ' ');
+            value = new String(dummy);
+         }
+      }
 
       return writeBytes(value.getBytes(), count) + extra;
    }
 
    protected int writeVariableTypeList(Object value) throws IOException{
-      ArrayList<Object> list = (ArrayList<Object>)value;
-      writeUnsigned(list.size(), 2);
+      Object [] list = (Object[])value;
+      writeUnsigned(list.length, 2);
       int length = 2;
       for(Object o : list){
          if(o == null)
@@ -404,13 +413,13 @@ public class STDFWriter{
             else if(o instanceof Long)
                length += writeUnsigned((Long)o, 4);
             else if(o instanceof String)
-               length += writeString((String)o, "n");
+               length += writeString((String)o, -1);
             else if(o instanceof Byte)
                length += writeBytes(new byte[]{ (Byte)o }, 1);
             else if(o instanceof Float)
-               length += writeField("R4", null, o);
+               length += writeField('R', 4, ' ', -1, null, o);
             else if(o instanceof Double)
-               length += writeField("R8", null, o);
+               length += writeField('R', 8, ' ', -1, null, o);
             else
                throw new IOException("Unknown variable type: " + o.getClass().getName());
          }
@@ -419,29 +428,15 @@ public class STDFWriter{
       return length;
    }
 
-   protected int writeArray(String typeCode, ArrayList<Object> fields, Object value) throws IOException{
-      // not using a regex here since this seems like it should be faster
-      // may change if necessary
-      int pos    = 1;
-      int length = typeCode.length();
-      for(; pos < length; pos++){
-         char c = typeCode.charAt(pos);
-         if(c >= 'A' && c <= 'Z')
-            break;
-      }
+   protected int writeArray(char type, int length,
+                            int fieldIndex, Object[] fields, Object value) throws IOException{
+      Object[] list  = (Object[])value;
+      long     count = (Long)fields[fieldIndex];
+      int      size  = 0;
 
-      int  fieldIndex = Integer.parseInt(typeCode.substring(1, pos));
-      long count      = (Long)fields.get(fieldIndex);
+      for(Object x : list)
+         size += writeField(type, length, ' ', -1, fields, x);
 
-      typeCode = typeCode.substring(pos);
-
-      ArrayList<Object> list = (ArrayList<Object>)value;
-
-      length = 0;
-
-      for(int i = 0; i < count; i++)
-         length += writeField(typeCode, fields, list.get(i));
-
-      return length;
+      return size;
    }
 }

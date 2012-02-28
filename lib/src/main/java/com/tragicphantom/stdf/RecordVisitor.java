@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -19,5 +19,7 @@
 package com.tragicphantom.stdf;
 
 public interface RecordVisitor{
+   public void beforeFile();
+   public void afterFile();
    public void handleRecord(Record record);
 }

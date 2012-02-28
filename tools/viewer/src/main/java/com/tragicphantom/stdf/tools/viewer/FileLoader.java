@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -36,6 +36,7 @@ import java.util.Enumeration;
 
 import com.tragicphantom.stdf.STDFContainer;
 import com.tragicphantom.stdf.Record;
+import com.tragicphantom.stdf.RecordData;
 import com.tragicphantom.stdf.STDFWriter;
 
 public class FileLoader{
@@ -118,20 +119,20 @@ public class FileLoader{
       return false;
    }
 
-   private String makeStdfWaferKey(Record record){
+   private String makeStdfWaferKey(RecordData data){
       String key = null;
-      if(record.hasField("HEAD_NUM") && record.getField("HEAD_NUM") != null)
-         key = record.getField("HEAD_NUM").toString();
+      if(data.hasField("HEAD_NUM") && data.getField("HEAD_NUM") != null)
+         key = data.getField("HEAD_NUM").toString();
       return key;
    }
 
-   private String makeStdfUnitKey(Record record){
+   private String makeStdfUnitKey(RecordData data){
       String key = null;
-      if(record.hasField("HEAD_NUM") && record.getField("HEAD_NUM") != null &&
-         record.hasField("SITE_NUM") && record.getField("SITE_NUM") != null){
-         key = new StringBuilder(record.getField("HEAD_NUM").toString())
+      if(data.hasField("HEAD_NUM") && data.getField("HEAD_NUM") != null &&
+         data.hasField("SITE_NUM") && data.getField("SITE_NUM") != null){
+         key = new StringBuilder(data.getField("HEAD_NUM").toString())
                .append(",")
-               .append(record.getField("SITE_NUM").toString())
+               .append(data.getField("SITE_NUM").toString())
                .toString();
       }
       return key;
@@ -144,71 +145,79 @@ public class FileLoader{
                               HashMap<String, MutableTreeNode> unitParents){
       String label = record.getType().toUpperCase();
 
+      RecordData data;
+      try{
+         data = record.getData();
+      }
+      catch(Exception e){
+         throw new RuntimeException(e);
+      }
+
       if(label.equals("MIR")){
-         Object lotObj = record.getField("LOT_ID");
+         Object lotObj = data.getField("LOT_ID");
          lotId = lotObj == null ? "" : lotObj.toString();
          if(lotId.length() > 0 && !lotId.equals(" "))
             label += " - " + lotId;
       }
       else if(label.equals("WIR")){
-         label += " - " + record.getField("WAFER_ID");
+         label += " - " + data.getField("WAFER_ID");
       }
       else if(label.equals("PIR")){
-         label += " - " + record.getField("HEAD_NUM")
+         label += " - " + data.getField("HEAD_NUM")
                         + ", "
-                        + record.getField("SITE_NUM");
+                        + data.getField("SITE_NUM");
 
          totalUnits++;
       }
       else if(label.equals("PRR")){
-         label += " - " + record.getField("HEAD_NUM")
+         label += " - " + data.getField("HEAD_NUM")
                         + ", "
-                        + record.getField("SITE_NUM")
-                        + " - HB = " + record.getField("HARD_BIN")
-                        + ", SB = " + record.getField("SOFT_BIN");
+                        + data.getField("SITE_NUM")
+                        + " - HB = " + data.getField("HARD_BIN")
+                        + ", SB = " + data.getField("SOFT_BIN");
       }
       else if(label.equals("DTR")){
-         Object textObj = record.getField("TEXT_DAT");
+         Object textObj = data.getField("TEXT_DAT");
          String text = textObj == null ? "" : textObj.toString();
          if(text.length() > 30)
             text = text.substring(0, 30) + "...";
          label += " - \"" + text + "\"";
       }
       else if(label.equals("PGR"))
-         label += " - " + record.getField("GRP_NAM");
+         label += " - " + data.getField("GRP_NAM");
       else if(label.equals("PTR")
               || label.equals("MPR")
               || label.equals("FTR"))
-         label += " - " + record.getField("TEST_TXT")
-                        + " [" + record.getField("TEST_NUM") + "]";
+         label += " - " + data.getField("TEST_TXT")
+                        + " [" + data.getField("TEST_NUM") + "]";
       else if(label.equals("BPS"))
-         label += " - " + record.getField("SEQ_NAME");
+         label += " - " + data.getField("SEQ_NAME");
       else if(label.equals("HBR")){
-         label += " - " + record.getField("HBIN_NAM")
-                        + " [" + record.getField("HBIN_NUM")
-                        + "] - " + record.getField("HBIN_PF")
-                        + " = " + record.getField("HBIN_CNT");
+         label += " - " + data.getField("HBIN_NAM")
+                        + " [" + data.getField("HBIN_NUM")
+                        + "] - " + data.getField("HBIN_PF")
+                        + " = " + data.getField("HBIN_CNT");
       }
       else if(label.equals("SBR")){
-         label += " - " + record.getField("SBIN_NAM")
-                        + " [" + record.getField("SBIN_NUM")
-                        + "] - " + record.getField("SBIN_PF")
-                        + " = " + record.getField("SBIN_CNT");
+         label += " - " + data.getField("SBIN_NAM")
+                        + " [" + data.getField("SBIN_NUM")
+                        + "] - " + data.getField("SBIN_PF")
+                        + " = " + data.getField("SBIN_CNT");
       }
       else if(label.equals("TSR"))
-         label += " - " + record.getField("TEST_NAM")
-                        + " [" + record.getField("TEST_NUM") + "]";
+         label += " - " + data.getField("TEST_NAM")
+                        + " [" + data.getField("TEST_NUM") + "]";
 
       DefaultMutableTreeNode node = new DefaultMutableTreeNode(new TreeRecord(record, label, fileId));
 
       if(label.startsWith("WIR")){
-         String waferKey = makeStdfWaferKey(record);
+         String waferKey = makeStdfWaferKey(data);
          if(waferKey != null)
             waferParents.put(waferKey, node);
          waferParents.put("LATEST", node);
       }
       else if(label.startsWith("WRR")){
-         String waferKey = makeStdfWaferKey(record);
+         String waferKey = makeStdfWaferKey(data);
          if(waferKey != null){
             parent = waferParents.get(waferKey);
             waferParents.remove(waferKey);
@@ -217,17 +226,17 @@ public class FileLoader{
             waferParents.remove("LATEST");
       }
       else if(label.startsWith("PIR")){
-         String unitKey = makeStdfUnitKey(record);
+         String unitKey = makeStdfUnitKey(data);
          if(unitKey != null)
             unitParents.put(unitKey, node);
          unitParents.put("LATEST", node);
 
-         String waferKey = makeStdfWaferKey(record);
+         String waferKey = makeStdfWaferKey(data);
          if(waferKey != null && waferParents.containsKey(waferKey))
             parent = waferParents.get(waferKey);
       }
       else if(label.startsWith("PRR")){
-         String unitKey = makeStdfUnitKey(record);
+         String unitKey = makeStdfUnitKey(data);
          if(unitKey != null){
             parent = unitParents.get(unitKey);
             unitParents.remove(unitKey);
@@ -242,11 +251,11 @@ public class FileLoader{
             parent = waferParents.get("LATEST");
       }
       else{
-         String key = makeStdfUnitKey(record);
+         String key = makeStdfUnitKey(data);
          if(key != null && unitParents.containsKey(key))
             parent = unitParents.get(key);
          else{
-            key = makeStdfWaferKey(record);
+            key = makeStdfWaferKey(data);
             if(key != null && waferParents.containsKey(key))
                parent = waferParents.get(key);
          }

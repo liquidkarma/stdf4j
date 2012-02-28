@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -23,6 +23,10 @@ public class RecordType{
    private int subType;
 
    public RecordType(int type, int subType){
+      set(type, subType);
+   }
+
+   public void set(int type, int subType){
       this.type    = type;
       this.subType = subType;
    }
@@ -35,10 +39,11 @@ public class RecordType{
       return subType;
    }
 
+   @Override
    public boolean equals(Object other){
       if(this == other)
          return true;
-      else if(other instanceof RecordType){
+      else if(other != null && other instanceof RecordType){
          RecordType otherType = (RecordType)other;
 
          return (type == otherType.getType() && subType == otherType.getSubType());

@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -18,89 +18,52 @@
 **/
 package com.tragicphantom.stdf;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.nio.ByteOrder;
+
+import java.text.ParseException;
 
 public class Record{
-   private String                  type;
-   private HashMap<String, Object> fields = new HashMap<String, Object>();
+   private RecordDescriptor desc;
+   private int              pos;
+   private byte []          data;
+   private ByteOrder        byteOrder;
+   private RecordData       rd;
 
-   public Record(String type){
-      this.type = type;
+   public Record(RecordDescriptor desc, int pos,
+                 byte [] data, ByteOrder byteOrder){
+      this.desc      = desc;
+      this.pos       = pos;
+      this.data      = data;
+      this.byteOrder = byteOrder;
+      this.rd        = null;
    }
 
-   public void setField(String name, Object value){
-      fields.put(name, value);
+   public Record(RecordDescriptor desc, RecordData rd){
+      this.desc = desc;
+      this.rd   = rd;
+      this.pos  = -1;
    }
 
    public String getType(){
-      return type;
+      return desc.getType();
    }
 
-   public HashMap<String, Object> getFields(){
-      return fields;
+   public int getPosition(){
+      return pos;
    }
 
-   public int size(){
-      return fields.size();
+   public RecordData getData() throws ParseException{
+      if(rd == null)
+         rd = desc.parse(pos, data, byteOrder);
+      return rd;
    }
 
-   public boolean hasField(String name){
-      return fields.containsKey(name);
-   }
-
-   public Object getField(String name){
-      return fields.get(name);
-   }
-
-   // this method has been tailored to output similar to libstdf format
-   // to help with comparing output of the two libraries
    public String toString(){
-      StringBuilder sb = new StringBuilder(type.toUpperCase());
-      sb.append("\n");
-      // sort fields using TreeMap for easier comparisons
-      for(Map.Entry<String, Object> field : new TreeMap<String, Object>(fields).entrySet()){
-         String name  = field.getKey();
-         Object value = field.getValue();
-
-         String repr;
-         if(value == null)
-            repr = "(null)";
-         else if(value instanceof Double)
-            repr = String.format("%f", (Double)value);
-         else if(value instanceof Float)
-            repr = String.format("%f", (Float)value);
-         else if(value instanceof ArrayList){
-            StringBuilder lb = new StringBuilder();
-            for(Object item : (ArrayList)value){
-               if(lb.length() > 0)
-                  lb.append(", ");
-               lb.append(item == null ? "(null)" : item.toString());
-            }
-            repr = lb.toString();
-         }
-         else if(value instanceof Byte)
-            repr = String.format("%x", (Byte)value);
-         else if(name.endsWith("_T") && !name.equals("TEST_T")){
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis((Long)value * 1000L);
-            repr = String.format("%1$ta %1$tb %1$td %1$tT %1$tY", cal);
-         }
-         else
-            repr = value.toString();
-
-         if(repr.length() == 0)
-            repr = "(null)";
-
-         sb.append("   ")
-           .append(name)
-           .append(": ")
-           .append(repr)
-           .append("\n");
+      try{
+         return getData().toString();
       }
-      return sb.toString();
+      catch(Exception e){
+         return "(null)";
+      }
    }
 }

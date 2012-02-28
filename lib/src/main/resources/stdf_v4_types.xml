@@ -1,5 +1,5 @@
 <!--
-   Copyright 2009 tragicphantom
+   Copyright 2009-2012 tragicphantom
 
    This file is part of stdf4j.
 
@@ -24,6 +24,10 @@
    <RecordType name="Atr" type="0" subType="20">
       <Field name="MOD_TIM" type="U4"/>
       <Field name="CMD_LINE" type="Cn"/>
+   </RecordType>
+   <RecordType name="Vur" type="0" subType="30">
+      <Field name="UPD_CNT" type="U1"/>
+      <Field name="UPD_NAM" type="k0Cn"/>
    </RecordType>
    <RecordType name="Mir" type="1" subType="10">
       <Field name="SETUP_T" type="U4"/>
@@ -146,6 +150,21 @@
       <Field name="LASR_ID" type="Cn"/>
       <Field name="EXTR_TYP" type="Cn"/>
       <Field name="EXTR_ID" type="Cn"/>
+   </RecordType>
+   <RecordType name="Psr" type="1" subType="90">
+      <Field name="CONT_FLG" type="B1"/>
+      <Field name="PSR_INDX" type="U2"/>
+      <Field name="PSR_NAM"  type="Cn"/>
+      <Field name="OPT_FLG"  type="B1"/>
+      <Field name="TOTP_CNT" type="U2"/>
+      <Field name="LOCP_CNT" type="U2"/>
+      <Field name="PAT_BGN"  type="k5U8"/>
+      <Field name="PAT_END"  type="k5U8"/>
+      <Field name="PAT_FILE" type="k5Cn"/>
+      <Field name="PAT_LBL"  type="k5Cn"/>
+      <Field name="FILE_UID" type="k5Cn"/>
+      <Field name="ATPG_DSC" type="k5Cn"/>
+      <Field name="SRC_ID"   type="k5Cn"/>
    </RecordType>
    <RecordType name="Wir" type="2" subType="10">
       <Field name="HEAD_NUM" type="U1"/>
@@ -296,6 +315,67 @@
       <Field name="RSLT_TXT" type="Cn"/>
       <Field name="PATG_NUM" type="U1"/>
       <Field name="SPIN_MAP" type="Dn"/>
+   </RecordType>
+   <RecordType name="Str" type="15" subType="30">
+      <Field name="CONT_FLG" type="B1"/>
+      <Field name="TEST_NUM" type="U4"/>
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+      <Field name="PSR_REF"  type="U2"/>
+      <Field name="TEST_FLG" type="B1"/>
+      <Field name="LOG_TYP"  type="Cn"/>
+      <Field name="TEST_TXT" type="Cn"/>
+      <Field name="ALARM_ID" type="Cn"/>
+      <Field name="PROG_TXT" type="Cn"/>
+      <Field name="RSLT_TXT" type="Cn"/>
+      <Field name="Z_VAL"    type="U1"/>
+      <Field name="FMU_FLG"  type="B1"/>
+      <Field name="MASK_MAP" type="Dn_12_01_01"/>
+      <Field name="FAL_MAP"  type="Dn_12_23_01"/>
+      <Field name="CYC_CNT"  type="U8"/>
+      <Field name="TOTF_CNT" type="U4"/>
+      <Field name="TOTL_CNT" type="U4"/>
+      <Field name="CYC_BASE" type="U8"/>
+      <Field name="BIT_BASE" type="U4"/>
+      <Field name="COND_CNT" type="U2"/>
+      <Field name="LIM_CNT"  type="U2"/>
+      <Field name="CYC_SIZE" type="U1"/>
+      <Field name="PMR_SIZE" type="U1"/>
+      <Field name="CHN_SIZE" type="U1"/>
+      <Field name="PAT_SIZE" type="U1"/>
+      <Field name="BIT_SIZE" type="U1"/>
+      <Field name="U1_SIZE"  type="U1"/>
+      <Field name="U2_SIZE"  type="U1"/>
+      <Field name="U3_SIZE"  type="U1"/>
+      <Field name="UTX_SIZE" type="U1"/>
+      <Field name="CAP_BGN"  type="U2"/>
+      <Field name="LIM_INDX" type="k21U2"/>
+      <Field name="LIM_SPEC" type="k21U4"/>
+      <Field name="COND_LST" type="k20Cn"/>
+      <Field name="CYCO_CNT" type="U2"/>
+      <Field name="CYC_OFST" type="k35Uf22"/>
+      <Field name="PMR_CNT"  type="U2"/>
+      <Field name="PMR_INDX" type="k37Uf23"/>
+      <Field name="CHN_CNT"  type="U2"/>
+      <Field name="CHN_NUM"  type="k39Uf24"/>
+      <Field name="EXP_CNT"  type="U2"/>
+      <Field name="EXP_DATA" type="k41U1"/>
+      <Field name="CAP_CNT"  type="U2"/>
+      <Field name="CAP_DATA" type="k43U1"/>
+      <Field name="NEW_CNT"  type="U2"/>
+      <Field name="NEW_DATA" type="k45U1"/>
+      <Field name="PAT_CNT"  type="U2"/>
+      <Field name="PAT_NUM"  type="k47Uf25"/>
+      <Field name="BPOS_CNT" type="U2"/>
+      <Field name="BIT_POS"  type="k49Uf26"/>
+      <Field name="USR1_CNT" type="U2"/>
+      <Field name="USR1"     type="k51Uf27"/>
+      <Field name="USR2_CNT" type="U2"/>
+      <Field name="USR2"     type="k53Uf28"/>
+      <Field name="USR3_CNT" type="U2"/>
+      <Field name="USR3"     type="k55Uf29"/>
+      <Field name="TXT_CNT"  type="U2"/>
+      <Field name="USER_TXT" type="k57Cf30"/>
    </RecordType>
    <RecordType name="Bps" type="20" subType="10">
       <Field name="SEQ_NAME" type="Cn"/>
