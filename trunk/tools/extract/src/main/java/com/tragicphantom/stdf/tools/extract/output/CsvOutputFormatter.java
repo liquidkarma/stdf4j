@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -46,9 +46,9 @@ public class CsvOutputFormatter implements OutputFormatter{
       return sb.toString();
    }
 
-   public void write(Record record){
+   public void write(Record record) throws Exception{
       String                  type   = record.getType().toUpperCase();
-      TreeMap<String, Object> fields = new TreeMap<String, Object>(record.getFields());
+      TreeMap<String, Object> fields = new TreeMap<String, Object>(record.getData().getFields());
 
       if(!type.equals(lastHeaderType)){
          lastHeaderType = type;

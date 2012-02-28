@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -104,9 +104,15 @@ public class DataTable extends JTable implements RecordSelectionListener,
          int         count = 0;
 
          if(record.getStdfRecord() != null){
-            Record                  stdfRecord = record.getStdfRecord();
-            HashMap<String, Object> fields     = stdfRecord.getFields();
-            TreeSet<String>         fieldNames = new TreeSet(fields.keySet());
+            HashMap<String, Object> fields;
+            try{
+               fields = record.getStdfRecord().getData().getFields();
+            }
+            catch(Exception e){
+               throw new RuntimeException(e);
+            }
+
+            TreeSet<String> fieldNames = new TreeSet(fields.keySet());
 
             data = new Object[fieldNames.size()][2];
 

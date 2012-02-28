@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-   Copyright 2009 tragicphantom
+   Copyright 2009-2012 tragicphantom
 
    This file is part of stdf4j.
 
@@ -36,6 +36,7 @@
    <modules>
       <module>dump</module>
       <module>extract</module>
+      <module>stats</module>
       <module>viewer</module>
    </modules>
 

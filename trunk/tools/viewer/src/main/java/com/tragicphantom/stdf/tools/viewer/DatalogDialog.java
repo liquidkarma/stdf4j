@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -59,9 +59,14 @@ public class DatalogDialog extends JDialog implements ActionListener{
 
       List<Record> records = FileLoader.getAllSTDFRecordsOfType("DTR");
       for(Record record : records){
-         Object textObj = record.getField("TEXT_DAT");
-         sb.append(textObj == null ? "" : textObj.toString())
-           .append("\n");
+         try{
+            Object textObj = record.getData().getField("TEXT_DAT");
+            sb.append(textObj == null ? "" : textObj.toString())
+              .append("\n");
+         }
+         catch(Exception e){
+            // ignore
+         }
       }
 
       textArea.setText(sb.toString());

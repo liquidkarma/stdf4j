@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *

@@ -1,0 +1,4 @@
+Display record stats for specified STDF file on the console.
+
+Example usage:
+./stats test_file.stdf

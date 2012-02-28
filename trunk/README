@@ -16,6 +16,15 @@ mvn clean install
 This will build the library and all tools.
 
 
+TEST CASES
+
+Test cases are likely to contain proprietary data. Under the 'testdata'
+directory is a project called 'create-sample-file', which can be used
+to create sample files to be used in test cases. This is how test data
+distributed with the core stdf4j release is created to avoid issues with
+proprietary data.
+
+
 RELEASE
 
 In theory the following should release a new version:

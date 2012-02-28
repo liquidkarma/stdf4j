@@ -1,5 +1,5 @@
 /**
- * Copyright 2009 tragicphantom
+ * Copyright 2009-2012 tragicphantom
  *
  * This file is part of stdf4j.
  *
@@ -55,6 +55,12 @@ public class Visitor implements RecordVisitor, Iterable<Record>{
 
    public int size(){
       return records.size();
+   }
+
+   public void beforeFile(){
+   }
+
+   public void afterFile(){
    }
 
    public void handleRecord(Record record){
