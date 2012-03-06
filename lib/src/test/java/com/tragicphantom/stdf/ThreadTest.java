@@ -79,10 +79,7 @@ public class ThreadTest{
       public void run(){
          try{
             Record record;
-            while(true){
-               record = queue.next();
-               if(record.getPosition() < 0)
-                  break;
+            while((record = queue.next()) != null){
                String key = record.getType().toUpperCase();
                if(stats.containsKey(key))
                   stats.put(key, stats.get(key) + 1);

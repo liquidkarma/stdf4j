@@ -24,21 +24,18 @@ import java.util.concurrent.TimeUnit;
 
 public class QueueVisitor implements RecordVisitor{
    private BlockingQueue<Record> queue;
+   private boolean               finishedReading = false;
 
    public QueueVisitor(int size){
       queue = new LinkedBlockingQueue(size);
    }
 
    public void beforeFile(){
+      finishedReading = false;
    }
 
    public void afterFile(){
-      try{
-         queue.put(new Record(null, null));
-      }
-      catch(InterruptedException e){
-         throw new RuntimeException(e);
-      }
+      finishedReading = true;
    }
 
    public void handleRecord(Record record){
@@ -50,11 +47,17 @@ public class QueueVisitor implements RecordVisitor{
       }
    }
 
-   public Record next() throws InterruptedException{
-      return queue.take();
+   public synchronized Record next() throws InterruptedException{
+      if(!finishedReading || queue.size() > 0)
+         return queue.take();
+      else
+         return null;
    }
 
    public Record next(long timeout, TimeUnit unit) throws InterruptedException{
-      return queue.poll(timeout, unit);
+      if(!finishedReading || queue.size() > 0)
+         return queue.poll(timeout, unit);
+      else
+         return null;
    }
 }
