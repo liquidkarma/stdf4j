@@ -1,11 +1,13 @@
 STDF4J
 
-Java library for reading STDF files. Currently only v4 is supported.
-Unfortunately, the test cases have been removed due to proprietary data,
+Java library for reading STDF files. Currently only v4/v4-2007 is supported.
+Unfortunately, the main test cases have been removed due to proprietary data,
 but the test class has been included for reference and can be updated to
 use any example STDF with corresponding statistics. For our testing we used
 an ascii dump of the STDF using libstdf (http://freestdf.sourceforge.net) to
-get the statistics for the test files.
+get the statistics for the test files. A small sample file is included for
+reference, but it is recommended that a real production file be verified
+before using this library on a large scale with your data.
 
 
 BUILDING
