@@ -36,12 +36,13 @@ public class Preferences extends JFrame implements ActionListener, ItemListener{
 
    private JCheckBox allFieldsButton = new JCheckBox("Show All Fields");
    private JCheckBox expandButton    = new JCheckBox("Expand to First Unit on Open");
+   private JCheckBox showGroups      = new JCheckBox("Group related record types");
 
    private Vector<PreferenceListener> preferenceListeners = new Vector<PreferenceListener>();
 
    public Preferences(){
       setTitle("Preferences");
-      setSize(new Dimension(600, 600));
+      setSize(new Dimension(300, 200));
 
       JPanel panel = new JPanel();
       okButton.addActionListener(this);
@@ -57,7 +58,8 @@ public class Preferences extends JFrame implements ActionListener, ItemListener{
 
       JCheckBox [] preferenceItems = new JCheckBox[]{
          allFieldsButton,
-         expandButton
+         expandButton,
+         showGroups
       };
 
       panel = new JPanel();
@@ -91,7 +93,9 @@ public class Preferences extends JFrame implements ActionListener, ItemListener{
 
    public void itemStateChanged(ItemEvent e){
       Object source = e.getItemSelectable();
-      if(source == allFieldsButton || source == expandButton)
+      if(source == allFieldsButton
+            || source == expandButton
+            || source == showGroups)
          setDirty(true);
    }
 
@@ -119,6 +123,7 @@ public class Preferences extends JFrame implements ActionListener, ItemListener{
    private void resetSettings(){
       allFieldsButton.setSelected(((Boolean)Settings.get("allFields", DefaultSettings.SHOW_ALL_FIELDS)).booleanValue());
       expandButton.setSelected(((Boolean)Settings.get("expandToFirstUnit", DefaultSettings.EXPAND_FIRST_UNIT)).booleanValue());
+      showGroups.setSelected(((Boolean)Settings.get("showGroups", DefaultSettings.GROUP_RECORDS)).booleanValue());
 
       setDirty(false);
    }
@@ -129,6 +134,10 @@ public class Preferences extends JFrame implements ActionListener, ItemListener{
 
    public boolean getExpandToFirstUnit(){
       return expandButton.isSelected();
+   }
+
+   public boolean getShowGroups(){
+      return showGroups.isSelected();
    }
 
    public void save(){

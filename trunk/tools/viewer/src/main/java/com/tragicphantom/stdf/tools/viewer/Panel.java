@@ -91,9 +91,11 @@ public class Panel extends JPanel implements SettingsProvider,
 
          Settings.addSettingsProvider(this);
          Settings.addSettingsProvider(dataTable);
+         Settings.addSettingsProvider(loader);
 
          preferences.load();
          preferences.addPreferenceListener(dataTable);
+         preferences.addPreferenceListener(loader);
 
          //we should be last listener so that it can process files if necessary
          preferences.addPreferenceListener(this);
