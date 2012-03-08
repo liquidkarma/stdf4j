@@ -21,4 +21,5 @@ package com.tragicphantom.stdf.tools.viewer;
 public class DefaultSettings{
    public static final boolean SHOW_ALL_FIELDS   = true;
    public static final boolean EXPAND_FIRST_UNIT = false;
+   public static final boolean GROUP_RECORDS     = false;
 }

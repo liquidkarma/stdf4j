@@ -25,6 +25,8 @@ import javax.swing.tree.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.FileInputStream;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -39,7 +41,7 @@ import com.tragicphantom.stdf.Record;
 import com.tragicphantom.stdf.RecordData;
 import com.tragicphantom.stdf.STDFWriter;
 
-public class FileLoader{
+public class FileLoader implements SettingsProvider, PreferenceListener{
    private static Vector<STDFContainer> stdfContainers = new Vector<STDFContainer>();
    private static Vector<String>        fileNames      = new Vector<String>();
 
@@ -48,11 +50,12 @@ public class FileLoader{
    private DefaultMutableTreeNode root      = null;
    private DefaultTreeModel       treeModel = null;
 
-   private String lotId            = "";
-   private int    recordCount      = 0;
-   private int    totalRecordCount = 0;
-   private int    totalUnits       = 0;
-   private int    startDepth       = -1;
+   private String  lotId            = "";
+   private int     recordCount      = 0;
+   private int     totalRecordCount = 0;
+   private int     totalUnits       = 0;
+   private int     startDepth       = -1;
+   private boolean showGroups       = DefaultSettings.GROUP_RECORDS;
 
    private static int nextFileId = 0;
 
@@ -64,7 +67,8 @@ public class FileLoader{
       boolean loaded = false;
 
       try{
-         stdfContainers.addElement(new STDFContainer(fileName));
+         InputStream is = new ProgressMonitorInputStream(panel, "Opening: " + fileName, new FileInputStream(fileName));
+         stdfContainers.addElement(new STDFContainer(is));
          fileNames.add(fileName);
          loaded = true;
       }
@@ -210,54 +214,56 @@ public class FileLoader{
 
       DefaultMutableTreeNode node = new DefaultMutableTreeNode(new TreeRecord(record, label, fileId));
 
-      if(label.startsWith("WIR")){
-         String waferKey = makeStdfWaferKey(data);
-         if(waferKey != null)
-            waferParents.put(waferKey, node);
-         waferParents.put("LATEST", node);
-      }
-      else if(label.startsWith("WRR")){
-         String waferKey = makeStdfWaferKey(data);
-         if(waferKey != null){
-            parent = waferParents.get(waferKey);
-            waferParents.remove(waferKey);
+      if(showGroups){
+         if(label.startsWith("WIR")){
+            String waferKey = makeStdfWaferKey(data);
+            if(waferKey != null)
+               waferParents.put(waferKey, node);
+            waferParents.put("LATEST", node);
          }
-         if(waferParents.containsKey("LATEST"))
-            waferParents.remove("LATEST");
-      }
-      else if(label.startsWith("PIR")){
-         String unitKey = makeStdfUnitKey(data);
-         if(unitKey != null)
-            unitParents.put(unitKey, node);
-         unitParents.put("LATEST", node);
+         else if(label.startsWith("WRR")){
+            String waferKey = makeStdfWaferKey(data);
+            if(waferKey != null){
+               parent = waferParents.get(waferKey);
+               waferParents.remove(waferKey);
+            }
+            if(waferParents.containsKey("LATEST"))
+               waferParents.remove("LATEST");
+         }
+         else if(label.startsWith("PIR")){
+            String unitKey = makeStdfUnitKey(data);
+            if(unitKey != null)
+               unitParents.put(unitKey, node);
+            unitParents.put("LATEST", node);
 
-         String waferKey = makeStdfWaferKey(data);
-         if(waferKey != null && waferParents.containsKey(waferKey))
-            parent = waferParents.get(waferKey);
-      }
-      else if(label.startsWith("PRR")){
-         String unitKey = makeStdfUnitKey(data);
-         if(unitKey != null){
-            parent = unitParents.get(unitKey);
-            unitParents.remove(unitKey);
+            String waferKey = makeStdfWaferKey(data);
+            if(waferKey != null && waferParents.containsKey(waferKey))
+               parent = waferParents.get(waferKey);
          }
-         if(unitParents.containsKey("LATEST"))
-            unitParents.remove("LATEST");
-      }
-      else if(label.startsWith("DTR")){
-         if(unitParents.containsKey("LATEST"))
-            parent = unitParents.get("LATEST");
-         else if(waferParents.containsKey("LATEST"))
-            parent = waferParents.get("LATEST");
-      }
-      else{
-         String key = makeStdfUnitKey(data);
-         if(key != null && unitParents.containsKey(key))
-            parent = unitParents.get(key);
+         else if(label.startsWith("PRR")){
+            String unitKey = makeStdfUnitKey(data);
+            if(unitKey != null){
+               parent = unitParents.get(unitKey);
+               unitParents.remove(unitKey);
+            }
+            if(unitParents.containsKey("LATEST"))
+               unitParents.remove("LATEST");
+         }
+         else if(label.startsWith("DTR")){
+            if(unitParents.containsKey("LATEST"))
+               parent = unitParents.get("LATEST");
+            else if(waferParents.containsKey("LATEST"))
+               parent = waferParents.get("LATEST");
+         }
          else{
-            key = makeStdfWaferKey(data);
-            if(key != null && waferParents.containsKey(key))
-               parent = waferParents.get(key);
+            String key = makeStdfUnitKey(data);
+            if(key != null && unitParents.containsKey(key))
+               parent = unitParents.get(key);
+            else{
+               key = makeStdfWaferKey(data);
+               if(key != null && waferParents.containsKey(key))
+                  parent = waferParents.get(key);
+            }
          }
       }
 
@@ -370,6 +376,18 @@ public class FileLoader{
       for(STDFContainer container : stdfContainers)
          writer.write(container);
       writer.close();
+   }
+
+   public void getSettings(){
+      Settings.put("showGroups", new Boolean(showGroups));
+   }
+
+   public void setSettings(){
+      showGroups = ((Boolean)Settings.get("showGroups", showGroups)).booleanValue();
+   }
+
+   public void preferencesChanged(Preferences preferences){
+      showGroups = preferences.getShowGroups();
    }
 }
 
