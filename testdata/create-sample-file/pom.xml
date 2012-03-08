@@ -32,7 +32,7 @@
       <dependency>
          <groupId>com.tragicphantom.stdf</groupId>
          <artifactId>stdf4j</artifactId>
-         <version>0.0.2-SNAPSHOT</version>
+         <version>0.0.2</version>
          <scope>test</scope>
       </dependency>
       <dependency>
