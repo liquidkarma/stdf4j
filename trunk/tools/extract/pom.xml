@@ -23,7 +23,7 @@
    <parent>
       <groupId>com.tragicphantom.stdf.tools</groupId>
       <artifactId>root</artifactId>
-      <version>0.0.2-SNAPSHOT</version>
+      <version>0.0.2</version>
    </parent>
 
    <artifactId>stdfextract</artifactId>
