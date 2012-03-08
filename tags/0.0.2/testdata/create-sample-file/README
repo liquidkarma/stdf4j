@@ -1,0 +1,5 @@
+Use this project to generate sample STDF files for testing. Files are
+created with the maven test goal so you can run:
+mvn test
+
+And this should create sample STDF files in the current working directory.

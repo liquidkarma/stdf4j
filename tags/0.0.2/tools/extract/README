@@ -1,0 +1,4 @@
+Command line extract tool. Run without any arguments to see usage information.
+
+Example extract of MRR record data:
+./extract -t MRR test_files.stdf

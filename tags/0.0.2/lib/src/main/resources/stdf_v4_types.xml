@@ -1,0 +1,391 @@
+<!--
+   Copyright 2009-2012 tragicphantom
+
+   This file is part of stdf4j.
+
+   Stdf4j is free software: you can redistribute it and/or modify
+   it under the terms of the GNU Lesser General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   Stdf4j is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public License
+   along with stdf4j.  If not, see http://www.gnu.org/licenses/.
+-->
+<STDFRecordTypes>
+   <RecordType name="Far" type="0" subType="10">
+      <Field name="CPU_TYPE" type="U1"/>
+      <Field name="STDF_VER" type="U1"/>
+   </RecordType>
+   <RecordType name="Atr" type="0" subType="20">
+      <Field name="MOD_TIM" type="U4"/>
+      <Field name="CMD_LINE" type="Cn"/>
+   </RecordType>
+   <RecordType name="Vur" type="0" subType="30">
+      <Field name="UPD_CNT" type="U1"/>
+      <Field name="UPD_NAM" type="k0Cn"/>
+   </RecordType>
+   <RecordType name="Mir" type="1" subType="10">
+      <Field name="SETUP_T" type="U4"/>
+      <Field name="START_T" type="U4"/>
+      <Field name="STAT_NUM" type="U1"/>
+      <Field name="MODE_COD" type="C1"/>
+      <Field name="RTST_COD" type="C1"/>
+      <Field name="PROT_COD" type="C1"/>
+      <Field name="BURN_TIM" type="U2"/>
+      <Field name="CMOD_COD" type="C1"/>
+      <Field name="LOT_ID" type="Cn"/>
+      <Field name="PART_TYP" type="Cn"/>
+      <Field name="NODE_NAM" type="Cn"/>
+      <Field name="TSTR_TYP" type="Cn"/>
+      <Field name="JOB_NAM" type="Cn"/>
+      <Field name="JOB_REV" type="Cn"/>
+      <Field name="SBLOT_ID" type="Cn"/>
+      <Field name="OPER_NAM" type="Cn"/>
+      <Field name="EXEC_TYP" type="Cn"/>
+      <Field name="EXEC_VER" type="Cn"/>
+      <Field name="TEST_COD" type="Cn"/>
+      <Field name="TST_TEMP" type="Cn"/>
+      <Field name="USER_TXT" type="Cn"/>
+      <Field name="AUX_FILE" type="Cn"/>
+      <Field name="PKG_TYP" type="Cn"/>
+      <Field name="FAMLY_ID" type="Cn"/>
+      <Field name="DATE_COD" type="Cn"/>
+      <Field name="FACIL_ID" type="Cn"/>
+      <Field name="FLOOR_ID" type="Cn"/>
+      <Field name="PROC_ID" type="Cn"/>
+      <Field name="OPER_FRQ" type="Cn"/>
+      <Field name="SPEC_NAM" type="Cn"/>
+      <Field name="SPEC_VER" type="Cn"/>
+      <Field name="FLOW_ID" type="Cn"/>
+      <Field name="SETUP_ID" type="Cn"/>
+      <Field name="DSGN_REV" type="Cn"/>
+      <Field name="ENG_ID" type="Cn"/>
+      <Field name="ROM_COD" type="Cn"/>
+      <Field name="SERL_NUM" type="Cn"/>
+      <Field name="SUPR_NAM" type="Cn"/>
+   </RecordType>
+   <RecordType name="Mrr" type="1" subType="20">
+      <Field name="FINISH_T" type="U4"/>
+      <Field name="DISP_COD" type="C1"/>
+      <Field name="USR_DESC" type="Cn"/>
+      <Field name="EXC_DESC" type="Cn"/>
+   </RecordType>
+   <RecordType name="Pcr" type="1" subType="30">
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+      <Field name="PART_CNT" type="U4"/>
+      <Field name="RTST_CNT" type="U4"/>
+      <Field name="ABRT_CNT" type="U4"/>
+      <Field name="GOOD_CNT" type="U4"/>
+      <Field name="FUNC_CNT" type="U4"/>
+   </RecordType>
+   <RecordType name="Hbr" type="1" subType="40">
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+      <Field name="HBIN_NUM" type="U2"/>
+      <Field name="HBIN_CNT" type="U4"/>
+      <Field name="HBIN_PF" type="C1"/>
+      <Field name="HBIN_NAM" type="Cn"/>
+   </RecordType>
+   <RecordType name="Sbr" type="1" subType="50">
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+      <Field name="SBIN_NUM" type="U2"/>
+      <Field name="SBIN_CNT" type="U4"/>
+      <Field name="SBIN_PF" type="C1"/>
+      <Field name="SBIN_NAM" type="Cn"/>
+   </RecordType>
+   <RecordType name="Pmr" type="1" subType="60">
+      <Field name="PMR_INDX" type="U2"/>
+      <Field name="CHAN_TYP" type="U2"/>
+      <Field name="CHAN_NAM" type="Cn"/>
+      <Field name="PHY_NAM" type="Cn"/>
+      <Field name="LOG_NAM" type="Cn"/>
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+   </RecordType>
+   <RecordType name="Pgr" type="1" subType="62">
+      <Field name="GRP_INDX" type="U2"/>
+      <Field name="GRP_NAM" type="Cn"/>
+      <Field name="INDX_CNT" type="U2"/>
+      <Field name="PMR_INDX" type="k2U2"/>
+   </RecordType>
+   <RecordType name="Plr" type="1" subType="63">
+      <Field name="GRP_CNT" type="U2"/>
+      <Field name="GRP_INDX" type="k0U2"/>
+      <Field name="GRP_MODE" type="k0U2"/>
+      <Field name="GRP_RADX" type="k0U1"/>
+      <Field name="PGM_CHAR" type="k0Cn"/>
+      <Field name="RTN_CHAR" type="k0Cn"/>
+      <Field name="PGM_CHAL" type="k0Cn"/>
+      <Field name="RTN_CHAL" type="k0Cn"/>
+   </RecordType>
+   <RecordType name="Rdr" type="1" subType="70">
+      <Field name="NUM_BINS" type="U2"/>
+      <Field name="RTST_BIN" type="k0U2"/>
+   </RecordType>
+   <RecordType name="Sdr" type="1" subType="80">
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_GRP" type="U1"/>
+      <Field name="SITE_CNT" type="U1"/>
+      <Field name="SITE_NUM" type="k2U1"/>
+      <Field name="HAND_TYP" type="Cn"/>
+      <Field name="HAND_ID" type="Cn"/>
+      <Field name="CARD_TYP" type="Cn"/>
+      <Field name="CARD_ID" type="Cn"/>
+      <Field name="LOAD_TYP" type="Cn"/>
+      <Field name="LOAD_ID" type="Cn"/>
+      <Field name="DIB_TYP" type="Cn"/>
+      <Field name="DIB_ID" type="Cn"/>
+      <Field name="CABL_TYP" type="Cn"/>
+      <Field name="CABL_ID" type="Cn"/>
+      <Field name="CONT_TYP" type="Cn"/>
+      <Field name="CONT_ID" type="Cn"/>
+      <Field name="LASR_TYP" type="Cn"/>
+      <Field name="LASR_ID" type="Cn"/>
+      <Field name="EXTR_TYP" type="Cn"/>
+      <Field name="EXTR_ID" type="Cn"/>
+   </RecordType>
+   <RecordType name="Psr" type="1" subType="90">
+      <Field name="CONT_FLG" type="B1"/>
+      <Field name="PSR_INDX" type="U2"/>
+      <Field name="PSR_NAM"  type="Cn"/>
+      <Field name="OPT_FLG"  type="B1"/>
+      <Field name="TOTP_CNT" type="U2"/>
+      <Field name="LOCP_CNT" type="U2"/>
+      <Field name="PAT_BGN"  type="k5U8"/>
+      <Field name="PAT_END"  type="k5U8"/>
+      <Field name="PAT_FILE" type="k5Cn"/>
+      <Field name="PAT_LBL"  type="k5Cn"/>
+      <Field name="FILE_UID" type="k5Cn"/>
+      <Field name="ATPG_DSC" type="k5Cn"/>
+      <Field name="SRC_ID"   type="k5Cn"/>
+   </RecordType>
+   <RecordType name="Wir" type="2" subType="10">
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_GRP" type="U1"/>
+      <Field name="START_T" type="U4"/>
+      <Field name="WAFER_ID" type="Cn"/>
+   </RecordType>
+   <RecordType name="Wrr" type="2" subType="20">
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_GRP" type="U1"/>
+      <Field name="FINISH_T" type="U4"/>
+      <Field name="PART_CNT" type="U4"/>
+      <Field name="RTST_CNT" type="U4"/>
+      <Field name="ABRT_CNT" type="U4"/>
+      <Field name="GOOD_CNT" type="U4"/>
+      <Field name="FUNC_CNT" type="U4"/>
+      <Field name="WAFER_ID" type="Cn"/>
+      <Field name="FABWF_ID" type="Cn"/>
+      <Field name="FRAME_ID" type="Cn"/>
+      <Field name="MASK_ID" type="Cn"/>
+      <Field name="USR_DESC" type="Cn"/>
+      <Field name="EXC_DESC" type="Cn"/>
+   </RecordType>
+   <RecordType name="Wcr" type="2" subType="30">
+      <Field name="WAFR_SIZ" type="R4"/>
+      <Field name="DIE_HT" type="R4"/>
+      <Field name="DIE_WID" type="R4"/>
+      <Field name="WF_UNITS" type="U1"/>
+      <Field name="WF_FLAT" type="C1"/>
+      <Field name="CENTER_X" type="I2"/>
+      <Field name="CENTER_Y" type="I2"/>
+      <Field name="POS_X" type="C1"/>
+      <Field name="POS_Y" type="C1"/>
+   </RecordType>
+   <RecordType name="Pir" type="5" subType="10">
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+   </RecordType>
+   <RecordType name="Prr" type="5" subType="20">
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+      <Field name="PART_FLG" type="B1"/>
+      <Field name="NUM_TEST" type="U2"/>
+      <Field name="HARD_BIN" type="U2"/>
+      <Field name="SOFT_BIN" type="U2"/>
+      <Field name="X_COORD" type="I2"/>
+      <Field name="Y_COORD" type="I2"/>
+      <Field name="TEST_T" type="U4"/>
+      <Field name="PART_ID" type="Cn"/>
+      <Field name="PART_TXT" type="Cn"/>
+      <Field name="PART_FIX" type="Bn"/>
+   </RecordType>
+   <RecordType name="Tsr" type="10" subType="30">
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+      <Field name="TEST_TYP" type="C1"/>
+      <Field name="TEST_NUM" type="U4"/>
+      <Field name="EXEC_CNT" type="U4"/>
+      <Field name="FAIL_CNT" type="U4"/>
+      <Field name="ALRM_CNT" type="U4"/>
+      <Field name="TEST_NAM" type="Cn"/>
+      <Field name="SEQ_NAME" type="Cn"/>
+      <Field name="TEST_LBL" type="Cn"/>
+      <Field name="OPT_FLAG" type="B1"/>
+      <Field name="TEST_TIM" type="R4"/>
+      <Field name="TEST_MIN" type="R4"/>
+      <Field name="TEST_MAX" type="R4"/>
+      <Field name="TST_SUMS" type="R4"/>
+      <Field name="TST_SQRS" type="R4"/>
+   </RecordType>
+   <RecordType name="Ptr" type="15" subType="10">
+      <Field name="TEST_NUM" type="U4"/>
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+      <Field name="TEST_FLG" type="B1"/>
+      <Field name="PARM_FLG" type="B1"/>
+      <Field name="RESULT" type="R4"/>
+      <Field name="TEST_TXT" type="Cn"/>
+      <Field name="ALARM_ID" type="Cn"/>
+      <Field name="OPT_FLAG" type="B1"/>
+      <Field name="RES_SCAL" type="I1"/>
+      <Field name="LLM_SCAL" type="I1"/>
+      <Field name="HLM_SCAL" type="I1"/>
+      <Field name="LO_LIMIT" type="R4"/>
+      <Field name="HI_LIMIT" type="R4"/>
+      <Field name="UNITS" type="Cn"/>
+      <Field name="C_RESFMT" type="Cn"/>
+      <Field name="C_LLMFMT" type="Cn"/>
+      <Field name="C_HLMFMT" type="Cn"/>
+      <Field name="LO_SPEC" type="R4"/>
+      <Field name="HI_SPEC" type="R4"/>
+   </RecordType>
+   <RecordType name="Mpr" type="15" subType="15">
+      <Field name="TEST_NUM" type="U4"/>
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+      <Field name="TEST_FLG" type="B1"/>
+      <Field name="PARM_FLG" type="B1"/>
+      <Field name="RTN_ICNT" type="U2"/>
+      <Field name="RSLT_CNT" type="U2"/>
+      <Field name="RTN_STAT" type="k5N1"/>
+      <Field name="RTN_RSLT" type="k6R4"/>
+      <Field name="TEST_TXT" type="Cn"/>
+      <Field name="ALARM_ID" type="Cn"/>
+      <Field name="OPT_FLAG" type="B1"/>
+      <Field name="RES_SCAL" type="I1"/>
+      <Field name="LLM_SCAL" type="I1"/>
+      <Field name="HLM_SCAL" type="I1"/>
+      <Field name="LO_LIMIT" type="R4"/>
+      <Field name="HI_LIMIT" type="R4"/>
+      <Field name="START_IN" type="R4"/>
+      <Field name="INCR_IN" type="R4"/>
+      <Field name="RTN_INDX" type="k5U2"/>
+      <Field name="UNITS" type="Cn"/>
+      <Field name="UNITS_IN" type="Cn"/>
+      <Field name="C_RESFMT" type="Cn"/>
+      <Field name="C_LLMFMT" type="Cn"/>
+      <Field name="C_HLMFMT" type="Cn"/>
+      <Field name="LO_SPEC" type="R4"/>
+      <Field name="HI_SPEC" type="R4"/>
+   </RecordType>
+   <RecordType name="Ftr" type="15" subType="20">
+      <Field name="TEST_NUM" type="U4"/>
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+      <Field name="TEST_FLG" type="B1"/>
+      <Field name="OPT_FLAG" type="B1"/>
+      <Field name="CYCL_CNT" type="U4"/>
+      <Field name="REL_VADR" type="U4"/>
+      <Field name="REPT_CNT" type="U4"/>
+      <Field name="NUM_FAIL" type="U4"/>
+      <Field name="XFAIL_AD" type="I4"/>
+      <Field name="YFAIL_AD" type="I4"/>
+      <Field name="VECT_OFF" type="I2"/>
+      <Field name="RTN_ICNT" type="U2"/>
+      <Field name="PGM_ICNT" type="U2"/>
+      <Field name="RTN_INDX" type="k12U2"/>
+      <Field name="RTN_STAT" type="k12N1"/>
+      <Field name="PGM_INDX" type="k13U2"/>
+      <Field name="PGM_STAT" type="k13N1"/>
+      <Field name="FAIL_PIN" type="Dn"/>
+      <Field name="VECT_NAM" type="Cn"/>
+      <Field name="TIME_SET" type="Cn"/>
+      <Field name="OP_CODE" type="Cn"/>
+      <Field name="TEST_TXT" type="Cn"/>
+      <Field name="ALARM_ID" type="Cn"/>
+      <Field name="PROG_TXT" type="Cn"/>
+      <Field name="RSLT_TXT" type="Cn"/>
+      <Field name="PATG_NUM" type="U1"/>
+      <Field name="SPIN_MAP" type="Dn"/>
+   </RecordType>
+   <RecordType name="Str" type="15" subType="30">
+      <Field name="CONT_FLG" type="B1"/>
+      <Field name="TEST_NUM" type="U4"/>
+      <Field name="HEAD_NUM" type="U1"/>
+      <Field name="SITE_NUM" type="U1"/>
+      <Field name="PSR_REF"  type="U2"/>
+      <Field name="TEST_FLG" type="B1"/>
+      <Field name="LOG_TYP"  type="Cn"/>
+      <Field name="TEST_TXT" type="Cn"/>
+      <Field name="ALARM_ID" type="Cn"/>
+      <Field name="PROG_TXT" type="Cn"/>
+      <Field name="RSLT_TXT" type="Cn"/>
+      <Field name="Z_VAL"    type="U1"/>
+      <Field name="FMU_FLG"  type="B1"/>
+      <Field name="MASK_MAP" type="Dn_12_01_01"/>
+      <Field name="FAL_MAP"  type="Dn_12_23_01"/>
+      <Field name="CYC_CNT"  type="U8"/>
+      <Field name="TOTF_CNT" type="U4"/>
+      <Field name="TOTL_CNT" type="U4"/>
+      <Field name="CYC_BASE" type="U8"/>
+      <Field name="BIT_BASE" type="U4"/>
+      <Field name="COND_CNT" type="U2"/>
+      <Field name="LIM_CNT"  type="U2"/>
+      <Field name="CYC_SIZE" type="U1"/>
+      <Field name="PMR_SIZE" type="U1"/>
+      <Field name="CHN_SIZE" type="U1"/>
+      <Field name="PAT_SIZE" type="U1"/>
+      <Field name="BIT_SIZE" type="U1"/>
+      <Field name="U1_SIZE"  type="U1"/>
+      <Field name="U2_SIZE"  type="U1"/>
+      <Field name="U3_SIZE"  type="U1"/>
+      <Field name="UTX_SIZE" type="U1"/>
+      <Field name="CAP_BGN"  type="U2"/>
+      <Field name="LIM_INDX" type="k21U2"/>
+      <Field name="LIM_SPEC" type="k21U4"/>
+      <Field name="COND_LST" type="k20Cn"/>
+      <Field name="CYCO_CNT" type="U2"/>
+      <Field name="CYC_OFST" type="k35Uf22"/>
+      <Field name="PMR_CNT"  type="U2"/>
+      <Field name="PMR_INDX" type="k37Uf23"/>
+      <Field name="CHN_CNT"  type="U2"/>
+      <Field name="CHN_NUM"  type="k39Uf24"/>
+      <Field name="EXP_CNT"  type="U2"/>
+      <Field name="EXP_DATA" type="k41U1"/>
+      <Field name="CAP_CNT"  type="U2"/>
+      <Field name="CAP_DATA" type="k43U1"/>
+      <Field name="NEW_CNT"  type="U2"/>
+      <Field name="NEW_DATA" type="k45U1"/>
+      <Field name="PAT_CNT"  type="U2"/>
+      <Field name="PAT_NUM"  type="k47Uf25"/>
+      <Field name="BPOS_CNT" type="U2"/>
+      <Field name="BIT_POS"  type="k49Uf26"/>
+      <Field name="USR1_CNT" type="U2"/>
+      <Field name="USR1"     type="k51Uf27"/>
+      <Field name="USR2_CNT" type="U2"/>
+      <Field name="USR2"     type="k53Uf28"/>
+      <Field name="USR3_CNT" type="U2"/>
+      <Field name="USR3"     type="k55Uf29"/>
+      <Field name="TXT_CNT"  type="U2"/>
+      <Field name="USER_TXT" type="k57Cf30"/>
+   </RecordType>
+   <RecordType name="Bps" type="20" subType="10">
+      <Field name="SEQ_NAME" type="Cn"/>
+   </RecordType>
+   <RecordType name="Eps" type="20" subType="20">
+   </RecordType>
+   <RecordType name="Gdr" type="50" subType="10">
+      <Field name="GEN_DATA" type="Vn"/>
+   </RecordType>
+   <RecordType name="Dtr" type="50" subType="30">
+      <Field name="TEXT_DAT" type="Cn"/>
+   </RecordType>
+</STDFRecordTypes>
