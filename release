@@ -38,7 +38,7 @@ else
 
    for file in `find . -name 'pom.xml'`
    do
-      sed -i "" -e "s/$VERSION/$RELEASE_VERSION/g" $file
+      sed -i -e "s/$VERSION/$RELEASE_VERSION/g" $file
    done
 
    svn ci -m "[release]: releasing version $RELEASE_VERSION"
@@ -57,7 +57,7 @@ else
 
    for file in `find . -name 'pom.xml'`
    do
-      sed -i "" -e "s/$RELEASE_VERSION/$DEV_VERSION/g" $file
+      sed -i -e "s/$RELEASE_VERSION/$DEV_VERSION/g" $file
    done
 
    svn ci -m "[release]: updating to next development version $DEV_VERSION"
