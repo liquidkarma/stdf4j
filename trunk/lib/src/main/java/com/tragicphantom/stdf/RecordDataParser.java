@@ -121,11 +121,14 @@ public class RecordDataParser{
          case 'D':
             return readBits(length);
          case 'C':
+         case 'S':
             if(length >= 0)
                return readString(length);
             else if(lengthFieldIndex >= 0)
                return readString((int)getFieldSize(fields[lengthFieldIndex]));
-            else
+            else if(type == 'S')
+               return readString(readUnsignedInt(2));
+            else // type == 'C'
                return readString(readUnsignedInt(1));
          case 'R':
             if(length == 4)
