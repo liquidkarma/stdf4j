@@ -62,6 +62,7 @@ String(data, offset, length, ASCII)
 
 one 1.2G stdf file need 24s with "record.getData()" called,
 after optimized, the time is 9s(test env, Windows 7, Java 1.8)
+
 CONTACT 
 
 lantianjialiang@126.com
