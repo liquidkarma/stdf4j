@@ -84,15 +84,15 @@ public class Stats implements RecordVisitor{
 				e.printStackTrace();
 			}
 		}
-//		long end = System.currentTimeMillis();
-//		System.out.println("time " + (end - start) / 1000.0);
+		long end = System.currentTimeMillis();
+		System.out.println("time " + (end - start) / 1000.0);
 		
-		try {
-		Thread.sleep(10000);
-	} catch (InterruptedException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	}
+//		try {
+//			Thread.sleep(10000);
+//		} catch (InterruptedException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
       
    }
 }
