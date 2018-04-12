@@ -19,9 +19,9 @@
 package com.tragicphantom.stdf;
 
 import java.util.Arrays;
-
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteOrder;
-
+import java.nio.charset.Charset;
 import java.text.ParseException;
 
 import com.tragicphantom.stdf.util.ByteArray;
@@ -33,13 +33,14 @@ public class RecordDataParser{
    private ByteArray        byteArray;
    private int              available;
    private int              offset;
+   
+   private static byte[] sharedBytes = new byte[10];
 
-   public RecordDataParser(RecordDescriptor desc, int pos, byte [] data,
-                           ByteOrder byteOrder){
+   public RecordDataParser(RecordDescriptor desc, int pos, byte [] data){
       this.desc      = desc;
       this.pos       = pos;
       this.data      = data;
-      this.byteArray = new ByteArray(byteOrder);
+      this.byteArray = ByteArray.getInstance();
       this.available = data.length;
       this.offset    = 0;
    }
@@ -50,7 +51,7 @@ public class RecordDataParser{
 
       for(Field field : desc.getFields()){
          Object value = null;
-         if(available > 0 && validField(field, fieldList)){
+         if(available > 0  /*&& validField(field, fieldList) */ ){
             //System.err.println(field.getName() + " => " + field.getType() + " => " + field.getLength());
             value = readField(field.getType(),
                               field.getLength(),
@@ -58,6 +59,27 @@ public class RecordDataParser{
                               field.getArrayType(),
                               field.getArraySizeFieldIndex(),
                               fieldList);
+            
+            
+//        	 char type = field.getType();
+//             if(type == 'I')
+//                value = Integer.valueOf(0);
+//             else if(type == 'U') {
+//            	 value = Long.valueOf(0);
+//             }
+//             else if(type == 'R')
+//                value = Double.valueOf(0.0);
+//             else if(type == 'k')
+//                value = readArray(field.getArrayType(),
+//                                  field.getArraySizeFieldIndex(),
+//                                  field.getLengthFieldIndex(),
+//                                  field.getLength(),
+//                                  fieldList, true);
+//             else if(type == 'B' && field.getLength() == 1)
+//                value = Byte.valueOf((byte)0);
+//             else if(type == 'S') {
+//            	 value = "1";
+//             }
          }
          else{
             char type = field.getType();
@@ -131,10 +153,11 @@ public class RecordDataParser{
             else // type == 'C'
                return readString(readUnsignedInt(1));
          case 'R':
-            if(length == 4)
-               return new Float(byteArray.toFloat(getBytes(4)));
-            else
-               return new Double(byteArray.toDouble(getBytes(8)));
+            if(length == 4) {
+               return Float.valueOf((byteArray.toFloat(getBytes(4))));
+            }
+
+            return Double.valueOf(byteArray.toDouble(getBytes(8)));
          case 'V':
             return readVariableTypeList();
          case 'k':
@@ -142,6 +165,20 @@ public class RecordDataParser{
                              length, fields, false);
       }
 
+//    if(type == 'I') {
+//       return Integer.valueOf(0);
+//    } else if(type == 'U') {
+//   	 	return Long.valueOf(0);
+//    } else if(type == 'R') {
+//       return Double.valueOf(0.0);
+//    } else if(type == 'k') {
+//    	 Object[] array = new Object[1];
+//       return array;
+//    } else if(type == 'B' && length == 1) {
+//       return Byte.valueOf((byte)0);
+//    } 
+//   	 return "1";
+      
       throw new ParseException("Invalid type code: " + type, pos);
    }
 
@@ -248,6 +285,8 @@ public class RecordDataParser{
       return size;
    }
 
+   private static final Charset ASCII = Charset.forName( "US-ASCII" );
+   
    protected String readString(int length){
        /**
        * The following is a trick from Trevor Pounds:
@@ -260,15 +299,28 @@ public class RecordDataParser{
        * but from my testing this custom logic outperforms the internal charset
        * encoding algorithm (i.e. -agentlib:hprof=cpu=times).
        */
-      final byte[] bbuf = getBytes(length);
+//      final byte[] bbuf = getBytes(length);
+//
+//      length = bbuf.length; // adjust according to how much data actually read
+//
+//      char [] cbuf = new char[length];
+//      for(int i = 0; i < length; i++)
+//         cbuf[i] = (char) (0xFF & bbuf[i]);
+//
+//      return new String(cbuf, 0, length).intern();
+	   
+//	   final byte[] bbuf = getBytes(length);
+//       return new String(bbuf);
+		available -= length;
+		if (available < 0) {
+			length += available;
+			available = 0;
+		}
 
-      length = bbuf.length; // adjust according to how much data actually read
-
-      char [] cbuf = new char[length];
-      for(int i = 0; i < length; i++)
-         cbuf[i] = (char) (0xFF & bbuf[i]);
-
-      return new String(cbuf, 0, length).intern();
+		String tmp = new String(data, offset, length, ASCII);
+		offset += length;
+		
+		return tmp;
    }
 
    protected int readSigned(int length){
@@ -304,9 +356,13 @@ public class RecordDataParser{
          available = 0;
       }
 
-      byte[] bytes = Arrays.copyOfRange(data, offset, offset + numBytes);
-      offset += numBytes;
+//      byte[] bytes = Arrays.copyOfRange(data, offset, offset + numBytes);
+//      offset += numBytes;
 
-      return bytes;
+      //TODO file sharedBytes to 0
+      System.arraycopy(data, offset, sharedBytes, 0, numBytes);
+      offset += numBytes;
+      
+      return sharedBytes;
    }
 }

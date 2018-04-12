@@ -75,7 +75,8 @@ public class RecordDescriptor{
       return indexes.containsKey(name);
    }
 
-   public RecordData parse(int pos, byte [] bytes, ByteOrder byteOrder) throws ParseException{
-      return new RecordDataParser(this, pos, bytes, byteOrder).parse();
+   public RecordData parse(int pos, byte [] bytes) throws ParseException{
+	   RecordDataParser parser = new RecordDataParser(this, pos, bytes);
+	   return parser.parse();
    }
 }

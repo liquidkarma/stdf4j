@@ -31,9 +31,17 @@ import java.util.Arrays;
  */
 public class ByteArray
 {
-   private ByteOrder byteOrder = ByteOrder.nativeOrder();
+	private static ByteOrder staticByteOrder = ByteOrder.nativeOrder();
+   
+	private ByteOrder byteOrder = ByteOrder.nativeOrder();
+   
+	private static ByteArray array = new ByteArray(staticByteOrder);
 
-   public ByteArray(){
+   public static ByteArray getInstance() {
+	   return array;
+   }
+   
+   private ByteArray(){
    }
 
    public ByteArray(ByteOrder byteOrder){
