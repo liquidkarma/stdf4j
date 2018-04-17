@@ -60,28 +60,7 @@ public class RecordDataParser{
                               field.getArraySizeFieldIndex(),
                               fieldList);
             
-            
-//        	 char type = field.getType();
-//             if(type == 'I')
-//                value = Integer.valueOf(0);
-//             else if(type == 'U') {
-//            	 value = Long.valueOf(0);
-//             }
-//             else if(type == 'R')
-//                value = Double.valueOf(0.0);
-//             else if(type == 'k')
-//                value = readArray(field.getArrayType(),
-//                                  field.getArraySizeFieldIndex(),
-//                                  field.getLengthFieldIndex(),
-//                                  field.getLength(),
-//                                  fieldList, true);
-//             else if(type == 'B' && field.getLength() == 1)
-//                value = Byte.valueOf((byte)0);
-//             else if(type == 'S') {
-//            	 value = "1";
-//             }
-         }
-         else{
+         } else {
             char type = field.getType();
             if(type == 'U' || type == 'I')
                value = Integer.valueOf(0);
@@ -164,20 +143,6 @@ public class RecordDataParser{
             return readArray(arrayType, arraySizeFieldIndex, lengthFieldIndex,
                              length, fields, false);
       }
-
-//    if(type == 'I') {
-//       return Integer.valueOf(0);
-//    } else if(type == 'U') {
-//   	 	return Long.valueOf(0);
-//    } else if(type == 'R') {
-//       return Double.valueOf(0.0);
-//    } else if(type == 'k') {
-//    	 Object[] array = new Object[1];
-//       return array;
-//    } else if(type == 'B' && length == 1) {
-//       return Byte.valueOf((byte)0);
-//    } 
-//   	 return "1";
       
       throw new ParseException("Invalid type code: " + type, pos);
    }

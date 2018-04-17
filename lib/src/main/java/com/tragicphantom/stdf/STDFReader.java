@@ -118,7 +118,7 @@ public class STDFReader{
                visitor.handleRecord(record);
          }
       }
-      catch(IOException e){
+      catch(IOException | ParseException e){
          // Ignore
          //e.printStackTrace();
       }
