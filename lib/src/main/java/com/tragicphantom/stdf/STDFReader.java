@@ -45,7 +45,7 @@ public class STDFReader{
    private InputStream stream         = null;
    private int         available      = 0;
    private int         totalBytes     = 0;
-   private ByteArray   byteArray      = new ByteArray();
+   private ByteArray   byteArray      = ByteArray.getInstance();
    private boolean     errorOnUnknown = true;
 
    public STDFReader(String fileName) throws FileNotFoundException, IOException{
@@ -57,7 +57,7 @@ public class STDFReader{
    }
 
    public STDFReader(InputStream stream) throws IOException{
-      InputStream bufis = new BufferedInputStream(stream);
+      InputStream bufis = new BufferedInputStream(stream, 8192 * 1);
       bufis.mark(2);
       int header = ((bufis.read() & 0xFF) << 8) + (bufis.read() & 0xFF);
       bufis.reset();
@@ -118,7 +118,7 @@ public class STDFReader{
                visitor.handleRecord(record);
          }
       }
-      catch(IOException e){
+      catch(IOException | ParseException e){
          // Ignore
          //e.printStackTrace();
       }
@@ -151,8 +151,8 @@ public class STDFReader{
       if(records.containsKey(header.getRecordType())){
          record = new Record(records.get(header.getRecordType()),
                              totalBytes,
-                             getBytes(header.getLength()),
-                             byteArray.getByteOrder());
+                             getBytes(header.getLength()) );
+//                             byteArray.getByteOrder());
       }
       else{
          // this may just be a user-defined record type not specified

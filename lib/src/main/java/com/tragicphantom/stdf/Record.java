@@ -22,21 +22,30 @@ import java.nio.ByteOrder;
 
 import java.text.ParseException;
 
+import com.tragicphantom.stdf.util.ByteArray;
+
 public class Record{
    private RecordDescriptor desc;
    private int              pos;
    private byte []          data;
-   private ByteOrder        byteOrder;
+//   private ByteOrder        byteOrder;
    private RecordData       rd;
 
-   public Record(RecordDescriptor desc, int pos,
-                 byte [] data, ByteOrder byteOrder){
-      this.desc      = desc;
-      this.pos       = pos;
-      this.data      = data;
-      this.byteOrder = byteOrder;
-      this.rd        = null;
-   }
+//   public Record(RecordDescriptor desc, int pos,
+//                 byte [] data, ByteOrder byteOrder){
+//      this.desc      = desc;
+//      this.pos       = pos;
+//      this.data      = data;
+//      this.byteOrder = byteOrder;
+//      this.rd        = null;
+//   }
+   
+	public Record(RecordDescriptor desc, int pos, byte[] data) {
+		this.desc = desc;
+		this.pos = pos;
+		this.data = data;
+		this.rd = null;
+	}
 
    public Record(RecordDescriptor desc, RecordData rd){
       this.desc = desc;
@@ -54,7 +63,7 @@ public class Record{
 
    public RecordData getData() throws ParseException{
       if(rd == null)
-         rd = desc.parse(pos, data, byteOrder);
+         rd = desc.parse(pos, data);
       return rd;
    }
 
@@ -65,5 +74,9 @@ public class Record{
       catch(Exception e){
          return "(null)";
       }
+   }
+   
+   public int getDataLength() {
+	   return data.length;
    }
 }

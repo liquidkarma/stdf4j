@@ -18,8 +18,10 @@
 **/
 package com.tragicphantom.stdf;
 
+import java.text.ParseException;
+
 public interface RecordVisitor{
    public void beforeFile();
    public void afterFile();
-   public void handleRecord(Record record);
+   public void handleRecord(Record record) throws ParseException;
 }

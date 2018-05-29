@@ -50,3 +50,19 @@ http://code.google.com/p/stdf4j
 CONTACT
 
 tragicphantom@gmail.com
+
+---
+
+performance optimize:
+1. change the ByteArray to singleton
+2. new Float/Double to Float/Double.valueOf
+3. change the  "new String(cbuf, 0, length).intern()" to new
+String(data, offset, length, ASCII)
+4. change the Arrays.copyOfRange to System.arraycopy
+
+one 1.2G stdf file need 24s with "record.getData()" called,
+after optimized, the time is 9s(test env, Windows 7, Java 1.8)
+
+CONTACT 
+
+lantianjialiang@126.com

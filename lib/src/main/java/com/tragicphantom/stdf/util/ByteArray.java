@@ -31,9 +31,17 @@ import java.util.Arrays;
  */
 public class ByteArray
 {
-   private ByteOrder byteOrder = ByteOrder.nativeOrder();
+	private static ByteOrder staticByteOrder = ByteOrder.nativeOrder();
+   
+	private ByteOrder byteOrder = ByteOrder.nativeOrder();
+   
+	private static ByteArray array = new ByteArray(staticByteOrder);
 
-   public ByteArray(){
+   public static ByteArray getInstance() {
+	   return array;
+   }
+   
+   private ByteArray(){
    }
 
    public ByteArray(ByteOrder byteOrder){
@@ -61,14 +69,16 @@ public class ByteArray
          return (char) ((bytes[0] & 0xFF) + ((bytes[1] & 0xFF) << 8));
    }
 
-   public final double toDouble(final byte[] bytes)
-      { return Double.longBitsToDouble(toLong(bytes)); }
+   public final double toDouble(final byte[] bytes) {
+       //TODO below maybe wrong for shared bytes array
+       return Double.longBitsToDouble(toLong(bytes)); 
+   }
 
    public final float toFloat(final byte[] bytes)
-      { return Float.intBitsToFloat(toInt(bytes)); }
+      { return Float.intBitsToFloat(toInt(bytes, 4)); }
 
-   public final int toInt(final byte[] bytes){
-      if(bytes.length == 4){
+   public final int toInt(final byte[] bytes, int length){
+      if(length == 4){
          if(byteOrder == ByteOrder.BIG_ENDIAN)
             return (int) (((bytes[0] & 0xFF) << 24) + ((bytes[1] & 0xFF) << 16) +
                           ((bytes[2] & 0xFF) << 8)  +  (bytes[3] & 0xFF));
@@ -83,12 +93,12 @@ public class ByteArray
    public int toSigned(final byte[] bytes, int length){
       int value = 0;
 
-      if(length == 1 && bytes.length >= 1)
+      if(length == 1)
          value = (int)bytes[0];
-      else if(length == 2 && bytes.length >= 2)
-         value = (int)toShort(bytes);
+      else if(length == 2)
+         value = (int)toShort(bytes, length);
       else
-         value = toInt(bytes);
+         value = toInt(bytes, length);
 
       return value;
    }
@@ -103,11 +113,11 @@ public class ByteArray
          value = b < 0 ? ((long)(b & 0x7F) | 0x80) : b;
       }
       else if(length == 2 && bytes.length >= 2){
-         short s = toShort(bytes);
+         short s = toShort(bytes, length);
          value = s < 0 ? ((long)(s & 0x7FFF) | 0x8000) : s;
       }
       else{
-         int i = toInt(bytes);
+         int i = toInt(bytes, length);
          value = i < 0 ? ((long)(i & 0x7FFFFFFFL) | 0x80000000L) : i;
       }
 
@@ -122,7 +132,7 @@ public class ByteArray
          value = b < 0 ? ((b & 0x7F) | 0x80) : b;
       }
       else if(length == 2 && bytes.length >= 2){
-         short s = toShort(bytes);
+         short s = toShort(bytes, length);
          value = s < 0 ? ((s & 0x7FFF) | 0x8000) : s;
       }
 
@@ -146,8 +156,8 @@ public class ByteArray
          return 0;
    }
 
-   public final short toShort(final byte[] bytes){
-      if(bytes.length == 2){
+   public final short toShort(final byte[] bytes, int length){
+      if(length == 2){
          if(byteOrder == ByteOrder.BIG_ENDIAN)
             return (short) ((bytes[1] & 0xFF) + ((bytes[0] & 0xFF) << 8));
          else

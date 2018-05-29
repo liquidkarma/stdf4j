@@ -19,15 +19,18 @@
 package com.tragicphantom.stdf.tools;
 
 import java.util.Map;
+import java.text.ParseException;
 import java.util.HashMap;
 
 import com.tragicphantom.stdf.STDFReader;
 import com.tragicphantom.stdf.Record;
+import com.tragicphantom.stdf.RecordData;
 import com.tragicphantom.stdf.RecordVisitor;
 
 public class Stats implements RecordVisitor{
    private HashMap<String, Integer> counts = new HashMap<String, Integer>();
    private int total = 0;
+   private int dataLenSum = 0;
 
    public void beforeFile(){
    }
@@ -36,33 +39,60 @@ public class Stats implements RecordVisitor{
    }
 
    public void handleRecord(Record record){
-      String key = record.getType().toUpperCase();
-      if(counts.containsKey(key))
-         counts.put(key, counts.get(key) + 1);
-      else
-         counts.put(key, 1);
-      total++;
+//      String key = record.getType().toUpperCase();
+      try {
+		RecordData data = record.getData();
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+//      if(counts.containsKey(key))
+//         counts.put(key, counts.get(key) + 1);
+//      else
+//         counts.put(key, 1);
+      
+//      dataLenSum += record.getDataLength();
+//      total++;
    }
 
    public void print(){
       System.out.println("Total records: " + total);
+//      System.out.println("Avg length: " + dataLenSum/total);
 
       for(Map.Entry<String, Integer> entry : counts.entrySet())
          System.out.println(entry.getKey() + ": " + entry.getValue());
    }
 
    public static void main(String [] args){
-      for(String arg : args){
-         try{
-            Stats      stats  = new Stats();
-            STDFReader reader = new STDFReader(arg);
-            reader.setErrorOnUnknown(false);
-            reader.parse(stats);
-            stats.print();
-         }
-         catch(Exception e){
-            e.printStackTrace();
-         }
-      }
+		com.tragicphantom.stdf.v4.Types.getRecordDescriptors();
+//		try {
+//			Thread.sleep(10000);
+//		} catch (InterruptedException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		
+		long start = System.currentTimeMillis();
+		for (String arg : args) {
+			try {
+				Stats stats = new Stats();
+				STDFReader reader = new STDFReader(arg);
+				reader.setErrorOnUnknown(false);
+				reader.parse(stats);
+				stats.print();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("time " + (end - start) / 1000.0);
+		
+//		try {
+//			Thread.sleep(10000);
+//		} catch (InterruptedException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+      
    }
 }
