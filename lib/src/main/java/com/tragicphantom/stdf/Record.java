@@ -10,60 +10,72 @@
  *
  * Stdf4j is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with stdf4j.  If not, see <http://www.gnu.org/licenses/>.
-**/
+ * along with stdf4j. If not, see <http://www.gnu.org/licenses/>.
+ **/
 package com.tragicphantom.stdf;
 
 import java.nio.ByteOrder;
-
 import java.text.ParseException;
 
-public class Record{
-   private RecordDescriptor desc;
-   private int              pos;
-   private byte []          data;
-   private ByteOrder        byteOrder;
-   private RecordData       rd;
+public class Record {
 
-   public Record(RecordDescriptor desc, int pos,
-                 byte [] data, ByteOrder byteOrder){
-      this.desc      = desc;
-      this.pos       = pos;
-      this.data      = data;
-      this.byteOrder = byteOrder;
-      this.rd        = null;
-   }
+    private RecordDescriptor desc;
 
-   public Record(RecordDescriptor desc, RecordData rd){
-      this.desc = desc;
-      this.rd   = rd;
-      this.pos  = -1;
-   }
+    private int pos;
 
-   public String getType(){
-      return desc.getType();
-   }
+    private byte[] data;
 
-   public int getPosition(){
-      return pos;
-   }
+    private ByteOrder byteOrder;
 
-   public RecordData getData() throws ParseException{
-      if(rd == null)
-         rd = desc.parse(pos, data, byteOrder);
-      return rd;
-   }
+    private RecordData rd;
 
-   public String toString(){
-      try{
-         return getData().toString();
-      }
-      catch(Exception e){
-         return "(null)";
-      }
-   }
+    public Record(RecordDescriptor desc, int pos, byte[] data, ByteOrder byteOrder) {
+        this.desc = desc;
+        this.pos = pos;
+        this.data = data;
+        this.byteOrder = byteOrder;
+        this.rd = null;
+    }
+
+    public Record(RecordDescriptor desc, RecordData rd) {
+        this.desc = desc;
+        this.rd = rd;
+        this.pos = -1;
+    }
+
+    public String getType() {
+        return this.desc.getType();
+    }
+
+    public int getPosition() {
+        return this.pos;
+    }
+
+    public RecordData getData() throws ParseException {
+        if (this.rd == null) {
+            this.rd = this.desc.parse(this.pos, this.data, this.byteOrder);
+        }
+        return this.rd;
+    }
+
+    public void clean() {
+        if (this.rd != null) {
+            this.rd.clean();
+        }
+        this.rd = null;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return getData().toString();
+        }
+        catch (Exception e) {
+            return "(null)";
+        }
+    }
 }
